@@ -14,41 +14,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-  
-<!--Firbase Auth for Google-->
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyAyHQEc2TKcxERFu_-POYGp6fR_qTyBQK4",
-    authDomain: "starstack-7951e.firebaseapp.com",
-    projectId: "starstack-7951e",
-    storageBucket: "starstack-7951e.firebasestorage.app",
-    messagingSenderId: "539252727920",
-    appId: "1:539252727920:web:647722f0ad9554562a54b5",
-    measurementId: "G-4FX51V20PV"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-<!--End Firebase Script-->
-
-<!--Start button to link with google-->
-  <script>
-  document.getElementById("start-btn").addEventListener("click", function (e) {
-    e.preventDefault();          // prevents the # jump
-    signInWithGoogle();          // calls your Firebase login function
-  });
-</script>
-<!--end start button-->
   
 <body>
 
@@ -174,5 +140,51 @@
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 
+  <!--Firbase Auth for Google-->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAyHQEc2TKcxERFu_-POYGp6fR_qTyBQK4",
+    authDomain: "starstack-7951e.firebaseapp.com",
+    projectId: "starstack-7951e",
+    storageBucket: "starstack-7951e.firebasestorage.app",
+    messagingSenderId: "539252727920",
+    appId: "1:539252727920:web:647722f0ad9554562a54b5",
+    measurementId: "G-4FX51V20PV"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // hook the button AFTER it exists
+  const btn = document.getElementById("start-btn");
+  btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    try {
+      const result = await signInWithPopup(auth, provider);
+      console.log("Signed in:", result.user.email);
+
+      // Option A: redirect (only if the file exists)
+      // window.location.href = "home.html";
+
+      // Option B: just change the button text
+      btn.textContent = "Signed in ✓";
+      btn.style.pointerEvents = "none";
+      btn.style.opacity = "0.8";
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
+  });
+</script>
+
+<!--End Firebase Script-->
+
+
+    
 </body>
 </html>
