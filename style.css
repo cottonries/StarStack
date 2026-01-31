@@ -56,12 +56,7 @@ body{
 }
 
 /* BUTTONS */
-.btn{
-  padding: 10px 16px;
-  border-radius: 999px;
-  font-weight: 600;
-  cursor: pointer;
-}
+
 .btn-primary{
   background: var(--purple);
   color: white;
@@ -69,6 +64,26 @@ body{
 .btn-ghost{
   background: transparent;
   border: 1px solid var(--border);
+}
+.hero-actions{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;   /* removes underline */
+  line-height: 1;
 }
 
 /* HERO */
