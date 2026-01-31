@@ -1,0 +1,162 @@
+:root{
+  --bg: #ffffff;
+  --text: #0b0f19;
+  --muted: #5c667a;
+  --border: #e9ecf2;
+  --card: #f6f7fb;
+  --purple: #7c2cff;
+  --purple-dark: #6420d9;
+  --shadow: 0 18px 50px rgba(15, 23, 42, 0.10);
+  --radius-xl: 28px;
+  --max: 1120px;
+}
+
+* { box-sizing: border-box; }
+
+body{
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.container{
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 22px;
+}
+
+/* NAV */
+.nav{
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner{
+  height: 72px;
+  display: flex;
+  align-items: center;
+}
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+}
+.logo{
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #0b0f19;
+  color: white;
+  display: grid;
+  place-items: center;
+}
+.logo.light{
+  background: white;
+  color: #0b0f19;
+}
+
+/* BUTTONS */
+.btn{
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-primary{
+  background: var(--purple);
+  color: white;
+}
+.btn-ghost{
+  background: transparent;
+  border: 1px solid var(--border);
+}
+
+/* HERO */
+.hero{
+  padding: 70px 0 40px;
+  text-align: center;
+}
+.hero h1{
+  font-size: clamp(46px, 6vw, 90px);
+  margin: 0;
+}
+.hero p{
+  max-width: 720px;
+  margin: 22px auto;
+  color: var(--muted);
+}
+
+/* GRID */
+.grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.card{
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.card img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* FEATURES */
+.features{
+  border-top: 1px solid var(--border);
+  padding: 50px 0;
+}
+.features-inner{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+}
+.feature-card{
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 26px;
+  box-shadow: 0 10px 35px rgba(15,23,42,.06);
+}
+.kicker{
+  font-size: 14px;
+  color: #7b8498;
+}
+.feature-title{
+  font-size: 32px;
+}
+.feature-text{
+  color: var(--muted);
+}
+
+/* FOOTER */
+.footer{
+  background: #0b0f19;
+  color: #d9deea;
+}
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+  font-size: 22px;
+}
+.footer-inner{
+  padding: 40px 0;
+  display: flex;
+  justify-content: space-between;
+}
+.footer-bottom{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.disclaimer{
+  text-align: center;
+  font-size: 13px;
+}
+.copyright{
+  text-align: right;
+  font-size: 13px;
+}

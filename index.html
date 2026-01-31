@@ -1,1 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StarStack</title>
 
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="container">
+      <div class="nav-inner">
+        <div class="brand">
+  <div class="logo">✦</div>
+  <div>StarStack</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container">
+        <h1>Workouts made<br/>simple, results<br/>made easy</h1>
+        <p>
+          Find quick, flexible routines for any schedule or fitness level.
+          No gym needed—just press play and go.
+        </p>
+
+<div class="hero-actions">
+<a href="login.html" class="btn btn-primary">Start now</a>
+
+
+  <a href="#purpose" class="btn btn-ghost">
+    Learn more
+  </a>
+</div>
+      </div>
+    </section>
+
+    <!-- IMAGE GRID -->
+    <section class="grid-wrap" id="workouts">
+      <div class="container">
+        <div class="grid">
+          <div class="card">
+            <img src="https://plus.unsplash.com/premium_photo-1672783582216-f7b0a370a1f8?q=80&w=1480&auto=format&fit=crop" alt="">
+          </div>
+          <div class="card">
+            <img src="https://plus.unsplash.com/premium_photo-1670505059783-228b77d8df17?q=80&w=987&auto=format&fit=crop" alt="">
+          </div>
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1539794830467-1f1755804d13?q=80&w=987&auto=format&fit=crop" alt="">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features" id="how">
+      <div class="container">
+        <div class="features-inner">
+          <div class="feature-card">
+            <p class="kicker">Quick start</p>
+            <h2 class="feature-title">Pick your pace</h2>
+            <p class="feature-text">
+              Choose from light, moderate, or high intensity, and then select what kind of equiptment you have. Start moving in minutes and track your progess.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <p class="kicker">Tips</p>
+            <h2 class="feature-title">Make progress sustainable</h2>
+            <p class="feature-text">
+              Short routines + consistency beats perfection.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PURPOSE -->
+<section class="features" id="purpose">
+  <div class="container">
+    <div class="feature-card">
+      <p class="kicker">Purpose Statement</p>
+      <h2 class="feature-title">What we’re here for</h2>
+      <p class="feature-text">
+        StarStack was created to simplify the process of finding and committing to effective at-home workouts.
+        It helps users quickly match with workouts that fit their fitness level, available equipment, and
+        personal goals, while supporting long-term consistency through workout tracking.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="logo light">✦</div>
+          <div>StarStack</div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <p>Contact: wangs99@uw.edu</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="disclaimer">
+          StarStack does not provide medical advice. Content is for informational purposes only.
+        </div>
+        <div class="copyright">
+          © <span id="year"></span> StarStack. All rights reserved.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
