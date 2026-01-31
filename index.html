@@ -41,7 +41,14 @@
 </script>
 <!--End Firebase Script-->
 
-
+<!--Start button to link with google-->
+  <script>
+  document.getElementById("start-btn").addEventListener("click", function (e) {
+    e.preventDefault();          // prevents the # jump
+    signInWithGoogle();          // calls your Firebase login function
+  });
+</script>
+<!--end start button-->
   
 <body>
 
@@ -68,7 +75,9 @@
         </p>
 
 <div class="hero-actions">
-<button id="start-btn" onclick="signInWithGoogle()">Start</button>
+  <a href="#" class="btn btn-primary" id="start-btn">Start now</a>
+</div>
+
 
 
 
