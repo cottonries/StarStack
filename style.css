@@ -147,31 +147,24 @@ body{
 
 /* FOOTER */
 .footer{
-  background: #0b0f19;
-  color: #d9deea;
-}
-.footer-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-weight: 800;
-  font-size: 22px;
+  background:#0b0f19;
+  color:#d9deea;
+  margin-top:60px;
 }
 .footer-inner{
-  padding: 40px 0;
-  display: flex;
-  justify-content: space-between;
+  display:flex;
+  justify-content:space-between;
+  padding:40px 0;
+}
+.footer-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:800;
 }
 .footer-bottom{
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  text-align:center;
+  font-size:13px;
+  padding-bottom:20px;
 }
-.disclaimer{
-  text-align: center;
-  font-size: 13px;
-}
-.copyright{
-  text-align: right;
-  font-size: 13px;
-}
+
