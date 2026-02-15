@@ -26,7 +26,7 @@ body{
   padding: 0 22px;
 }
 
-/* NAV */
+/*--------------------- NAV --------------------- */
 .nav{
   border-bottom: 1px solid var(--border);
 }
@@ -55,6 +55,33 @@ body{
   color: #0b0f19;
 }
 
+/* NAV LINKS */
+.nav-links{
+  display:flex;
+  gap:20px;
+  align-items:center;
+}
+
+.nav-links a{
+  text-decoration:none;
+  color:var(--text);
+  font-weight:600;
+}
+
+.nav-links a:hover{
+  color:var(--purple);
+}
+
+/* Home quote emphasis (optional) */
+#quoteText{
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+/*This will highlight the current page in the nav bar*/
+.nav-links a.active{
+  color: var(--purple);
+}
 /* BUTTONS */
 
 .btn-primary{
@@ -85,6 +112,8 @@ body{
   text-decoration: none;   /* removes underline */
   line-height: 1;
 }
+/*--------------------- END NAV --------------------- */
+
 
 /* HERO */
 .hero{
@@ -145,7 +174,7 @@ body{
   color: var(--muted);
 }
 
-/* FOOTER */
+/*--------------------- FOOTER --------------------- */
 .footer{
   background:#0b0f19;
   color:#d9deea;
@@ -167,4 +196,7 @@ body{
   font-size:13px;
   padding-bottom:20px;
 }
+/*--------------------- END FOOTER --------------------- */
+
+
 
