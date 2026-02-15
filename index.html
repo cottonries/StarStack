@@ -5,20 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>StarStack</title>
 
-  <!-- Font -->
+  <!--- FONT --->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- External CSS -->
+  <!--- EXTERNAL CSS --->
   <link rel="stylesheet" href="style.css">
 </head>
-
-
-  
 <body>
 
-  <!-- NAV -->
+  <!--- NAV --->
   <header class="nav">
     <div class="container">
       <div class="nav-inner">
@@ -31,7 +28,7 @@
   </header>
 
   <main>
-    <!-- HERO -->
+    <!--- HERO --->
     <section class="hero">
       <div class="container">
         <h1>Workouts made<br/>simple, results<br/>made easy</h1>
@@ -42,11 +39,6 @@
 
 <div class="hero-actions">
   <a href="#" class="btn btn-primary" id="start-btn">Start now</a>
-
-
-
-
-
   <a href="#purpose" class="btn btn-ghost">
     Learn more
   </a>
@@ -54,7 +46,7 @@
       </div>
     </section>
 
-    <!-- IMAGE GRID -->
+    <!--- IMAGE GRID --->
     <section class="grid-wrap" id="workouts">
       <div class="container">
         <div class="grid">
@@ -71,7 +63,7 @@
       </div>
     </section>
 
-    <!-- FEATURES -->
+    <!--- FEATURES --->
     <section class="features" id="how">
       <div class="container">
         <div class="features-inner">
@@ -94,7 +86,7 @@
       </div>
     </section>
 
-    <!-- PURPOSE -->
+    <!--- PURPOSE --->
 <section class="features" id="purpose">
   <div class="container">
     <div class="feature-card">
@@ -139,7 +131,7 @@
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 
-  <!--Firbase Auth for Google-->
+  <!--- FIREBASE AUTH FOR GOOGLE --->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
@@ -167,13 +159,9 @@
       const result = await signInWithPopup(auth, provider);
       console.log("Signed in:", result.user.email);
 
-      // Option A: redirect (only if the file exists)
-      // window.location.href = "home.html";
+      /*REDIRECTS TO HOME.HTML AFTER SIGNING IN*/
+      window.location.href = "home.html";
 
-      // Option B: just change the button text
-      btn.textContent = "Signed in ✓";
-      btn.style.pointerEvents = "none";
-      btn.style.opacity = "0.8";
     } catch (err) {
       console.error(err);
       alert(err.message);
@@ -181,7 +169,7 @@
   });
 </script>
 
-<!--End Firebase Script-->
+<!--- END FIREBASE SCRIPT --->
     
 </body>
 </html>
