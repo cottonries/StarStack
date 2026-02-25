@@ -109,7 +109,7 @@
   const auth = getAuth(app);
 
   const greeting = document.getElementById("user-greeting");
-const logoutBtn = document.getElementById("logout-btn");
+  const logoutBtn = document.getElementById("logout-btn");
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
