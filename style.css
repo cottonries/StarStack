@@ -163,6 +163,17 @@ body::before{
   cursor: pointer;
   text-decoration: none;   /* removes underline */
   line-height: 1;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+
+.btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(124,44,255,.18);
+}
+
+.btn:active{
+  transform: translateY(0px);
+  box-shadow: none;
 }
 /*--------------------- END NAV --------------------- */
 
