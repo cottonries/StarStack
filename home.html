@@ -43,7 +43,19 @@
 
    
 <!--- ADD HOME PAGE CODE HERE--->
+<main>
+  <section class="hero">
+    <div class="container">
+      <h1>Welcome to StarStack</h1>
+      <h2 id="user-greeting">Checking sign-in...</h2>
 
+      <div style="margin-top: 20px;">
+        <a href="workout.html" class="btn btn-primary">Start Workout</a>
+        <a href="progress.html" class="btn btn-ghost">View Progress</a>
+      </div>
+    </div>
+  </section>
+</main>
 
 
 
@@ -77,6 +89,36 @@
   </div>
 </footer>
 
+</script>
+   <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAyHQEc2TKcxERFu_-POYGp6fR_qTyBQK4",
+    authDomain: "starstack-7951e.firebaseapp.com",
+    projectId: "starstack-7951e",
+    storageBucket: "starstack-7951e.firebasestorage.app",
+    messagingSenderId: "539252727920",
+    appId: "1:539252727920:web:647722f0ad9554562a54b5"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const greeting = document.getElementById("user-greeting");
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const firstName = user.displayName
+        ? user.displayName.split(" ")[0]
+        : "User";
+
+      greeting.textContent = `Signed in: ${firstName}`;
+    } else {
+      window.location.href = "index.html";
+    }
+  });
 </script>
 </body>
 </html>
