@@ -12,12 +12,51 @@
 }
 
 * { box-sizing: border-box; }
-
+/*------------------BODY-------------------------*/
 body{
   margin: 0;
   font-family: Inter, system-ui, sans-serif;
   color: var(--text);
   background: var(--bg);
+  position: relative;
+  background: linear-gradient(180deg, #ffffff 0%, #f3f5ff 100%);
+}
+
+/* Animated glow layer */
+body::after{
+  content:"";
+  position: fixed;
+  inset: -20%;
+  z-index: -2;
+  pointer-events: none;
+
+  background:
+    radial-gradient(900px 600px at 10% 5%, rgba(124,44,255,.24), transparent 60%),
+    radial-gradient(850px 580px at 90% 10%, rgba(0,194,255,.22), transparent 60%),
+    radial-gradient(900px 700px at 50% 95%, rgba(255,120,255,.18), transparent 65%);
+
+  filter: blur(2px);
+  transform: translate3d(0,0,0);
+  animation: glow-drift 14s ease-in-out infinite alternate;
+}
+
+@keyframes glow-drift{
+  0%   { transform: translate(-1.5%, -1%) scale(1); }
+  50%  { transform: translate(1.5%,  1%) scale(1.02); }
+  100% { transform: translate(-1%,  1.5%) scale(1.01); }
+}
+
+/* Grain stays subtle */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: .07;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
 }
 
 .container{
@@ -29,6 +68,19 @@ body{
 /*--------------------- NAV --------------------- */
 .nav{
   border-bottom: 1px solid var(--border);
+  background:#ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  transition: box-shadow .2s ease, background .2s ease, backdrop-filter .2s ease;
+}
+
+/* This class will be toggled by JS when you scroll */
+.nav.is-scrolled{
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.06);
 }
 .nav-inner{
   height: 72px;
@@ -119,6 +171,20 @@ body{
 .hero{
   padding: 70px 0 40px;
   text-align: center;
+  position: relative;
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:-40px -20px -10px -20px;
+  z-index:-1;
+  pointer-events:none;
+
+  background:
+    radial-gradient(700px 420px at 50% 20%, rgba(124,44,255,.20), transparent 60%),
+    radial-gradient(650px 420px at 70% 10%, rgba(0,194,255,.14), transparent 60%);
+  filter: blur(1px);
 }
 .hero h1{
   font-size: clamp(46px, 6vw, 90px);
@@ -152,6 +218,24 @@ body{
   border-top: 1px solid var(--border);
   padding: 50px 0;
 }
+/* ===== Frost + hover polish ===== */
+.feature-card,
+.cal-cell,
+.cal-detail{
+  background: rgba(255,255,255,.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(124,44,255,.12);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.feature-card:hover,
+.cal-cell:hover{
+  transform: translateY(-3px);
+  border-color: rgba(124,44,255,.22);
+  box-shadow: 0 28px 80px rgba(124,44,255,.16);
+}
+
 .features-inner{
   display: grid;
   grid-template-columns: 1fr 1fr;
