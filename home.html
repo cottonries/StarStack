@@ -65,8 +65,7 @@
 
 
 <!----DO NOT EDIT/DELETE. THIS IS THE FOOTER NEEDED ON ALL PAGES----->
-  </main>
-
+  
 <footer class="footer">
   <div class="container">
     <div class="footer-inner">
@@ -91,7 +90,7 @@
   </div>
 </footer>
 
-</script>
+
    <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
@@ -112,17 +111,26 @@
   const logoutBtn = document.getElementById("logout-btn");
   const mainWelcome = document.getElementById("main-welcome");
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const firstName = user.displayName
-        ? user.displayName.split(" ")[0]
-        : "User";
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const firstName = user.displayName
+      ? user.displayName.split(" ")[0]
+      : "User";
 
+    // Nav (keep this working)
+    if (greeting) {
       greeting.textContent = `Signed in: ${firstName}`;
-    } else {
-      window.location.href = "index.html";
     }
-  });
+
+    // Hero (add this)
+    if (mainWelcome) {
+      mainWelcome.textContent = `Welcome to StarStack ${firstName}`;
+    }
+
+  } else {
+    window.location.href = "index.html";
+  }
+});
 
   logoutBtn.addEventListener("click", () => {
     signOut(auth)
