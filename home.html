@@ -48,7 +48,7 @@
 <main>
   <section class="hero">
     <div class="container">
-      <h1>Welcome to StarStack <span id="username"></span></h1>
+      <h1 id="main-welcome">Welcome to StarStack</h1>
       
 
       <div style="margin-top: 20px;">
@@ -110,6 +110,7 @@
 
   const greeting = document.getElementById("user-greeting");
   const logoutBtn = document.getElementById("logout-btn");
+  const mainWelcome = document.getElementById("main-welcome");
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
