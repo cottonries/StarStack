@@ -30,6 +30,10 @@
         <a href="home.html" >Home</a> 
         <a href="workout.html">Workout</a>
         <a href="progress.html" class="active" >Progress</a> <!--ACTIVE TAB IS PROGRESS PAGE-->
+        <span id="nav-user" style="margin-left: 20px; font-weight: 500;">
+    Loading...
+  </span>
+        
         <button id="logout-btn" class="btn btn-ghost" style="margin-left: 15px;">
     Logout
   </button>
@@ -95,20 +99,27 @@
   const auth = getAuth(app);
 
   const logoutBtn = document.getElementById("logout-btn");
+  const navUser = document.getElementById("nav-user");
 
   onAuthStateChanged(auth, (user) => {
     if (!user) {
       window.location.href = "index.html";
+      return;
     }
 
-    // Only home page has greeting element
-    const greeting = document.getElementById("user-greeting");
-    if (user && greeting) {
-      const firstName = user.displayName
-        ? user.displayName.split(" ")[0]
-        : "User";
+    const firstName = user.displayName
+      ? user.displayName.split(" ")[0]
+      : "User";
 
-      greeting.textContent = `Signed in: ${firstName}`;
+    // Update navbar name
+    if (navUser) {
+      navUser.textContent = `Signed in: ${firstName}`;
+    }
+
+    // If home page greeting exists
+    const homeGreeting = document.getElementById("user-greeting");
+    if (homeGreeting) {
+      homeGreeting.textContent = `Signed in: ${firstName}`;
     }
   });
 
