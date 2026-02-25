@@ -27,10 +27,12 @@
       </div>
 
       <nav class="nav-links">
-        <a href="home.html" class="active" >Home</a> <!--ACTIVE TAB IS HOME PAGE-->
-        <a href="workout.html">Workout</a>
-        <a href="progress.html">Progress</a>
-
+  <a href="home.html" class="active">Home</a>
+  <a href="workout.html">Workout</a>
+  <a href="progress.html">Progress</a>
+  <button id="logout-btn" class="btn btn-ghost" style="margin-left: 15px;">
+    Logout
+  </button>
       </nav>
 
     </div>
@@ -107,6 +109,7 @@
   const auth = getAuth(app);
 
   const greeting = document.getElementById("user-greeting");
+const logoutBtn = document.getElementById("logout-btn");
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -118,6 +121,16 @@
     } else {
       window.location.href = "index.html";
     }
+  });
+
+  logoutBtn.addEventListener("click", () => {
+    signOut(auth)
+      .then(() => {
+        window.location.href = "index.html";
+      })
+      .catch((error) => {
+        console.error("Logout error:", error);
+      });
   });
 </script>
 </body>
