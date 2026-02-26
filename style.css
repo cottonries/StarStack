@@ -269,6 +269,51 @@ body::before{
   color: var(--muted);
 }
 
+/*--------------------- WORKOUT PAGE CSS --------------------- */
+/* THIS IS NEW FOR THE .CSS. NEEDED FOR VIDEO PLAYER> ADD INTO GITHUB FROM HERE*/
+
+/* Selector */
+.selector-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-bottom:16px;
+}
+label{
+  display:grid;
+  gap:8px;
+  font-weight:700;
+}
+select{
+  padding:12px;
+  border-radius:14px;
+  border:1px solid var(--border);
+}
+.btn-primary:hover{
+  background:var(--purple-dark);
+}
+.status{
+  margin-top:12px;
+  color:var(--muted);
+}
+
+/* Player */
+.player-wrap{
+  margin-top:16px;
+  aspect-ratio:16/9;
+  background:black;
+  border-radius:var(--radius-xl);
+  overflow:hidden;
+}
+#player{
+  width:100%;
+  height:100%;
+  border:0;
+}
+
+/*TO HERE ADD TO GITHUB*/
+/*--------------------- END WORKOUT PAGE CSS --------------------- */
+
 /*--------------------- FOOTER --------------------- */
 .footer{
   background:#0b0f19;
