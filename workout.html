@@ -48,10 +48,61 @@
 
    
 <!--- ADD WORKOUT PAGE CODE HERE--->
+<main>
+  <section class="hero">
+    <div class="container">
+      <h1>Find your workout</h1>
+      <p>Select intensity and equipment, then press play.</p>
+    </div>
+  </section>
+
+  <section class="features selector-section">
+    <div class="container">
+      <div class="feature-card">
+
+        <p class="kicker">Workout Selector</p>
+        <h2 class="feature-title">Choose your options</h2>
+
+        <div class="selector-grid">
+          <label>
+            Intensity
+            <select id="intensity">
+              <option value="" selected disabled>— Select intensity —</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </label>
+
+          <label>
+            Equipment
+            <select id="equipment">
+              <option value="" selected disabled>— Select equipment —</option>
+              <option value="none">None</option>
+              <option value="dumbbells">Dumbbells</option>
+              <option value="yoga_mat">Yoga Mat</option>
+            </select>
+          </label>
+        </div>
+
+        <button id="findBtn" class="btn btn-primary">Find Workout</button>
+        <p id="msg" class="status"></p>
+
+        <div class="player-wrap">
+          <iframe
+            id="player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
 
 
-
-
+<!----END WORKOUT PAGE CODE----->
 
 
 
@@ -81,6 +132,9 @@
     </div>
   </div>
 </footer>
+
+<script src="js/app.js" defer></script>
+   
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
