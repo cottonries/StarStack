@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     easy: {
       none:"",
       dumbbells: "",
-      yoga_mat: "PLhHXVTMoVJN7TLvTmAX_6oIU3ULLSk26Y&si=YgpzER1m-pfyr8R3",
+      yoga_mat: "PLhHXVTMoVJN7TLvTmAX_6oIU3ULLSk26Y",
     },
     medium: {
       none:"",
