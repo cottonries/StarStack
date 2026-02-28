@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /* THIS NEEDS LINKS FROM OTHER GROUP MEMBERS WHO CREATED PLAYLISTS */
   const PLAYLISTS = {
     easy: {
-      none:"",
+      none: "PLoc73631HFejnrFbIlSLXG9R1LLHuUmWX&si=18guMJfbMiggd9k3",
       dumbbells: "",
       yoga_mat: "PLhHXVTMoVJN7TLvTmAX_6oIU3ULLSk26Y",
     },
