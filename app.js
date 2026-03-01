@@ -9,19 +9,19 @@ document.addEventListener("DOMContentLoaded", () => {
 /* THIS NEEDS LINKS FROM OTHER GROUP MEMBERS WHO CREATED PLAYLISTS */
   const PLAYLISTS = {
     easy: {
-      none: "PLoc73631HFejnrFbIlSLXG9R1LLHuUmWX&si=18guMJfbMiggd9k3",
-      dumbbells: "",
+      none: "PLoc73631HFejnrFbIlSLXG9R1LLHuUmWX",
+      dumbbells: "PLhHXVTMoVJN7eZslVmQ9-bZcK7ufQfmq_",
       yoga_mat: "PLhHXVTMoVJN7TLvTmAX_6oIU3ULLSk26Y",
     },
     medium: {
       none:"",
-      dumbbells: "",
+      dumbbells: "PLhHXVTMoVJN4Dst3Z6LFb7z10-mtSqqTf",
       yoga_mat: "",
       
     },
     hard: {
       none:"",
-      dumbbells: "",
+      dumbbells: "PLhHXVTMoVJN70baFfYDS9nQ05x8tyBaq3",
       yoga_mat: "",
     },
   };
