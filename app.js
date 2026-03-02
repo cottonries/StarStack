@@ -12,19 +12,19 @@ document.addEventListener("DOMContentLoaded", () => {
       none: "PLoc73631HFejnrFbIlSLXG9R1LLHuUmWX",
       dumbbells: "PLhHXVTMoVJN7eZslVmQ9-bZcK7ufQfmq_",
       yoga_mat: "PLux1QALV3rOuDP6bJ059AX2kKH-PWkSih&si=R4VFtUOmV6h1sn8_",
-      bands:"",
+      bands:"PLrpq5Rd6OQUq-LDRPgVnYTZcVYC0ilVEg&si=RX_f8LeWOaBivLcL",
     },
     medium: {
       none:"",
       dumbbells: "PLhHXVTMoVJN4Dst3Z6LFb7z10-mtSqqTf",
       yoga_mat: "PLux1QALV3rOuQVVJTdtF2UkO_KYJc5EOj&si=8dclyEWJvKQDS6Su",
-      bands:"",
+      bands:"PLrpq5Rd6OQUo4jk9H-D3H4oO7RIJZQiMT&si=Cc9XEHLXShdiVg_X",
     },
     hard: {
       none:"",
       dumbbells: "PLhHXVTMoVJN70baFfYDS9nQ05x8tyBaq3",
       yoga_mat: "PLux1QALV3rOuTeMq7kzrnwHhAl-b3VK0c&si=E1o4RFpLwhu-JpUE",
-      bands:"",
+      bands:"PLrpq5Rd6OQUoUmdZ172BpwCdAo52-m7Ed&si=Zz__-emR6jDg06iE",
     },
   };
 
