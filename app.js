@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     hard: {
       none:"",
       dumbbells: "PLhHXVTMoVJN70baFfYDS9nQ05x8tyBaq3",
-      yoga_mat: "",
+      yoga_mat: "PLux1QALV3rOuTeMq7kzrnwHhAl-b3VK0c&si=E1o4RFpLwhu-JpUE",
     },
   };
 
