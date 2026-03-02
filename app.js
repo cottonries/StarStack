@@ -15,13 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
       bands:"PLrpq5Rd6OQUq-LDRPgVnYTZcVYC0ilVEg&si=RX_f8LeWOaBivLcL",
     },
     medium: {
-      none:"",
+      none:"PL-QBwSWQqkd9Z4HtlDJ-WYIr3n8quyxGL&si=tbpOiyyHh87mwRRu",
       dumbbells: "PLhHXVTMoVJN4Dst3Z6LFb7z10-mtSqqTf",
       yoga_mat: "PLux1QALV3rOuQVVJTdtF2UkO_KYJc5EOj&si=8dclyEWJvKQDS6Su",
       bands:"PLrpq5Rd6OQUo4jk9H-D3H4oO7RIJZQiMT&si=Cc9XEHLXShdiVg_X",
     },
     hard: {
-      none:"",
+      none:"PL-QBwSWQqkd_rPVP8L7Ygjo_NnX-cfjOT&si=_NJblZeyzFwPfZu8",
       dumbbells: "PLhHXVTMoVJN70baFfYDS9nQ05x8tyBaq3",
       yoga_mat: "PLux1QALV3rOuTeMq7kzrnwHhAl-b3VK0c&si=E1o4RFpLwhu-JpUE",
       bands:"PLrpq5Rd6OQUoUmdZ172BpwCdAo52-m7Ed&si=Zz__-emR6jDg06iE",
