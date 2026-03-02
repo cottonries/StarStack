@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     medium: {
       none:"",
       dumbbells: "PLhHXVTMoVJN4Dst3Z6LFb7z10-mtSqqTf",
-      yoga_mat: "PLux1QALV3rOuQVVJTdtF2UkO_KYJc5EOj&si=Vgzt-mw1Y9B5rx3f",
+      yoga_mat: "PLux1QALV3rOuQVVJTdtF2UkO_KYJc5EOj&si=8dclyEWJvKQDS6Su",
       
     },
     hard: {
