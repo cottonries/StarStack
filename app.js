@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
 /* THIS NEEDS LINKS FROM OTHER GROUP MEMBERS WHO CREATED PLAYLISTS */
   const PLAYLISTS = {
-    easy: {
+    easy: { "PLux1QALV3rOuDP6bJ059AX2kKH-PWkSih&si=R4VFtUOmV6h1sn8_" 
       none: "PLoc73631HFejnrFbIlSLXG9R1LLHuUmWX",
       dumbbells: "PLhHXVTMoVJN7eZslVmQ9-bZcK7ufQfmq_",
       yoga_mat: "PLhHXVTMoVJN7TLvTmAX_6oIU3ULLSk26Y",
