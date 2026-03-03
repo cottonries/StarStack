@@ -1,3 +1,43 @@
+
+/*----------------------------WORKOUT LOGGING (SHARED BY WORKOUT.HTML AND PROGRESS.HTML)----------------------------*/
+
+const STORAGE_KEY = "starstack_workout_log_v1";
+
+function pad2(n) { return String(n).padStart(2, "0"); }
+function toISODate(d) {
+  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+}
+
+function loadLog() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveLog(log) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(log));
+}
+
+// Called when user clicks "Find Workout"
+function logWorkout(intensity, equipment) {
+  const todayISO = toISODate(new Date());
+  const log = loadLog();
+
+  log[todayISO] = {
+    intensity,
+    equipment,
+    ts: Date.now()
+  };
+
+  saveLog(log);
+}
+/*----------------------------END WORKOUT LOGGING (SHARED BY WORKOUT.HTML AND PROGRESS.HTML)----------------------------*/
+
+
+
 /*----------------------------WORKOUT.HTML LOGIC----------------------------*/
 document.addEventListener("DOMContentLoaded", () => {
   const intensityEl = document.getElementById("intensity");
@@ -63,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /*----------------------------PROGRESS.HTML LOGIC----------------------------*/
-const STORAGE_KEY = "starstack_workout_log_v1";
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const calGrid = document.getElementById("calGrid");
@@ -77,20 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!calGrid || !calTitle || !calDetail) {
     console.error("Missing calendar elements. Need: #calGrid, #calTitle, #calDetail");
     return;
-  }
-
-  function pad2(n) { return String(n).padStart(2, "0"); }
-  function toISODate(d) {
-    return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
-  }
-
-  function loadLog() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : {};
-    } catch {
-      return {};
-    }
   }
 
   function monthName(m) {
@@ -204,3 +230,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /*----------------------------END PROGRESS.HTML LOGIC----------------------------*/
+
+
+
