@@ -34,6 +34,132 @@ function logWorkout(intensity, equipment) {
 
   saveLog(log);
 }
+
+function computeStreakStats() {
+  const log = loadLog();
+  const dates = Object.keys(log).sort(); // ISO sort works
+
+  if (dates.length === 0) return { current: 0, longest: 0 };
+
+  // Longest streak (all-time)
+  let longest = 1;
+  let run = 1;
+
+  for (let i = 1; i < dates.length; i++) {
+    const prev = new Date(dates[i - 1] + "T00:00:00");
+    const curr = new Date(dates[i] + "T00:00:00");
+    const diffDays = Math.round((curr - prev) / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 1) {
+      run += 1;
+      longest = Math.max(longest, run);
+    } else if (diffDays === 0) {
+      continue; // duplicate same-day entry (unlikely but safe)
+    } else {
+      run = 1;
+    }
+  }
+
+  // Current streak (from today backwards)
+  let current = 0;
+  const d = new Date();
+  while (true) {
+    const iso = toISODate(d);
+    if (log[iso]) {
+      current += 1;
+      d.setDate(d.getDate() - 1);
+    } else {
+      break;
+    }
+  }
+
+  return { current, longest };
+}
+
+function buildLastNDaysSeries(n = 14) {
+  const log = loadLog();
+  const today = new Date();
+
+  const labels = [];
+  const values = [];
+
+  for (let i = n - 1; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+
+    const iso = toISODate(d);
+    labels.push(`${d.getMonth() + 1}/${d.getDate()}`); // M/D
+    values.push(log[iso] ? 1 : 0); // 1 if workout logged else 0
+  }
+
+  return { labels, values };
+}
+
+function drawLineChart(ctx, labels, values) {
+  const canvas = ctx.canvas;
+
+  // HiDPI support
+  const dpr = window.devicePixelRatio || 1;
+  const cssW = canvas.clientWidth || canvas.width;
+  const cssH = canvas.clientHeight || canvas.height;
+
+  canvas.width = Math.floor(cssW * dpr);
+  canvas.height = Math.floor(cssH * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const w = cssW;
+  const h = cssH;
+  ctx.clearRect(0, 0, w, h);
+
+  const pad = 18;
+  const plotW = w - pad * 2;
+  const plotH = h - pad * 2;
+
+  const maxY = Math.max(1, ...values);
+  const minY = 0;
+
+  const x = (i) => pad + (i * plotW) / Math.max(1, values.length - 1);
+  const y = (v) => {
+    const t = (v - minY) / (maxY - minY || 1);
+    return pad + (1 - t) * plotH;
+  };
+
+  // baseline
+  ctx.globalAlpha = 0.25;
+  ctx.beginPath();
+  ctx.moveTo(pad, pad + plotH);
+  ctx.lineTo(pad + plotW, pad + plotH);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+
+  // line
+  ctx.beginPath();
+  values.forEach((v, i) => {
+    const px = x(i);
+    const py = y(v);
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  });
+  ctx.stroke();
+
+  // dots
+  values.forEach((v, i) => {
+    const px = x(i);
+    const py = y(v);
+    ctx.beginPath();
+    ctx.arc(px, py, 3, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // x labels (a few)
+  ctx.font = "12px Inter, system-ui, sans-serif";
+  ctx.globalAlpha = 0.7;
+  const step = Math.ceil(labels.length / 4);
+  for (let i = 0; i < labels.length; i += step) {
+    ctx.fillText(labels[i], x(i) - 8, pad + plotH + 14);
+  }
+  ctx.globalAlpha = 1;
+}
 /*----------------------------END WORKOUT LOGGING (SHARED BY WORKOUT.HTML AND PROGRESS.HTML)----------------------------*/
 
 
@@ -103,8 +229,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /*----------------------------PROGRESS.HTML LOGIC----------------------------*/
-
-
 document.addEventListener("DOMContentLoaded", () => {
   const calGrid = document.getElementById("calGrid");
   const calTitle = document.getElementById("calTitle");
@@ -114,18 +238,38 @@ document.addEventListener("DOMContentLoaded", () => {
   const calNext = document.getElementById("calNext");
   const calToday = document.getElementById("calToday");
 
-  if (!calGrid || !calTitle || !calDetail) {
-    console.error("Missing calendar elements. Need: #calGrid, #calTitle, #calDetail");
-    return;
-  }
+  // If we're not on progress.html, exit silently
+  if (!calGrid || !calTitle || !calDetail) return;
 
   function monthName(m) {
     return ["January","February","March","April","May","June","July","August","September","October","November","December"][m];
   }
 
-  
   let view = new Date();
   view.setDate(1);
+
+  function renderStats() {
+    const streakEl = document.getElementById("streakCount");
+    const longestEl = document.getElementById("longestStreak");
+    const streakSub = document.getElementById("streakSubtext");
+
+    const { current, longest } = computeStreakStats();
+
+    if (streakEl) streakEl.textContent = current;
+    if (longestEl) longestEl.textContent = longest;
+
+    if (streakSub) {
+      streakSub.textContent =
+        current > 0 ? "Keep going — don’t break the chain." : "Log a workout today to start your streak.";
+    }
+
+    const canvas = document.getElementById("streakChart");
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
+      const { labels, values } = buildLastNDaysSeries(14);
+      drawLineChart(ctx, labels, values);
+    }
+  }
 
   function renderCalendar() {
     const log = loadLog();
@@ -156,8 +300,7 @@ document.addEventListener("DOMContentLoaded", () => {
       calGrid.appendChild(blank);
     }
 
-    const today = new Date();
-    const todayISO = toISODate(today);
+    const todayISO = toISODate(new Date());
 
     // days
     for (let day = 1; day <= daysInMonth; day++) {
@@ -173,9 +316,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (entry) btn.classList.add("cal-done");
 
       const equipmentPretty = entry?.equipment ? entry.equipment.replace("_", " ") : "";
-      const label = entry
-        ? `${entry.intensity.toUpperCase()} · ${equipmentPretty.toUpperCase()}`
-        : "";
+      const label = entry ? `${entry.intensity.toUpperCase()} · ${equipmentPretty.toUpperCase()}` : "";
 
       btn.innerHTML = `
         <div class="cal-top">
@@ -186,38 +327,34 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
 
       btn.addEventListener("click", () => {
-        if (!entry) {
-          calDetail.innerHTML =
-            `<p class="feature-text" style="margin:0;"><strong>${iso}</strong>: No workout logged.</p>`;
-        } else {
-          calDetail.innerHTML = `
-            <p class="feature-text" style="margin:0;">
-              <strong>${iso}</strong><br>
-              ${entry.intensity.toUpperCase()} + ${equipmentPretty.toUpperCase()}
-            </p>`;
-        }
+        calDetail.innerHTML = entry
+          ? `<p class="feature-text" style="margin:0;"><strong>${iso}</strong><br>${entry.intensity.toUpperCase()} + ${equipmentPretty.toUpperCase()}</p>`
+          : `<p class="feature-text" style="margin:0;"><strong>${iso}</strong>: No workout logged.</p>`;
       });
 
       calGrid.appendChild(btn);
     }
   }
 
-  // nav buttons (only if present)
+  // nav buttons
   calPrev?.addEventListener("click", () => {
     view = new Date(view.getFullYear(), view.getMonth() - 1, 1);
     renderCalendar();
+    renderStats();
   });
 
   calNext?.addEventListener("click", () => {
     view = new Date(view.getFullYear(), view.getMonth() + 1, 1);
     renderCalendar();
+    renderStats();
   });
 
   calToday?.addEventListener("click", () => {
     const now = new Date();
     view = new Date(now.getFullYear(), now.getMonth(), 1);
     renderCalendar();
-    
+    renderStats();
+
     // show today's detail
     const iso = toISODate(now);
     const entry = loadLog()[iso];
@@ -226,10 +363,8 @@ document.addEventListener("DOMContentLoaded", () => {
       : `<p class="feature-text" style="margin:0;"><strong>${iso}</strong>: No workout logged.</p>`;
   });
 
+  // initial render
   renderCalendar();
+  renderStats();
 });
-
 /*----------------------------END PROGRESS.HTML LOGIC----------------------------*/
-
-
-
