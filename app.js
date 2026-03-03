@@ -368,3 +368,22 @@ document.addEventListener("DOMContentLoaded", () => {
   renderStats();
 });
 /*----------------------------END PROGRESS.HTML LOGIC----------------------------*/
+
+/*----------------------------HOME.HTML LOGIC (QUOTES)----------------------------*/
+const quotes = [
+  { text: "You just can’t beat the person who never gives up.", sub: "— Babe Ruth" },
+  { text: "You’ve survived 100 percent of your worst days.", sub: "— Robin Arzon" },
+  { text: "The hardest part is over. You showed up.", sub: "— Jess Sims" },
+  { text: "A 10-minute workout is always better than none.", sub: "— StarStack" },
+  { text: "Treat your body like someone you love.", sub: "— Hannah Corbin" },
+];
+
+document.addEventListener("DOMContentLoaded", () => {
+  const q = quotes[Math.floor(Math.random() * quotes.length)];
+  const quoteText = document.getElementById("quoteText");
+  const quoteSub = document.getElementById("quoteSub");
+
+  if (quoteText) quoteText.textContent = `“${q.text}”`;
+  if (quoteSub) quoteSub.textContent = q.sub;
+});
+/*----------------------------END HOME.HTML LOGIC (QUOTES)----------------------------*/
