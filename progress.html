@@ -78,7 +78,28 @@
       <div class="cal-detail" id="calDetail">
         <p class="feature-text" style="margin:0;">Click a day to see what you logged.</p>
       </div>
+      
+<!-- Streak + Chart -->
+<div class="streak-wrap">
+  <div class="streak-card">
+    <p class="kicker">Streak</p>
+    <h3 class="streak-title">
+      You’ve worked out <span id="streakCount">0</span> days in a row 🔥
+    </h3>
+    <p class="feature-text" id="streakSubtext" style="margin:6px 0 0;">
+      Log a workout today to start your streak.
+    </p>
 
+    <p class="feature-text" style="margin:6px 0 0;">
+      Longest streak: <strong><span id="longestStreak">0</span></strong> days
+    </p>
+  </div>
+
+  <div class="chart-card">
+    <p class="kicker">Last 14 days</p>
+    <canvas id="streakChart" height="120"></canvas>
+  </div>
+</div>
       
     </div>
   </div>
