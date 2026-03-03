@@ -438,11 +438,49 @@ select{
 .cal-day{
   background: #fff;
 }
-
-
 /*--------------------- END PROGRESS PAGE CSS --------------------- */
 
 
+
+
+/*--------------------- STREAK + CHART (PROGRESS) --------------------- */
+.streak-wrap{
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.streak-card,
+.chart-card{
+  background: rgba(255,255,255,.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(124,44,255,.12);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 10px 35px rgba(15,23,42,.06);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.streak-card:hover,
+.chart-card:hover{
+  transform: translateY(-3px);
+  border-color: rgba(124,44,255,.22);
+  box-shadow: 0 28px 80px rgba(124,44,255,.16);
+}
+
+.streak-title{
+  margin: 6px 0 0;
+  font-size: 22px;
+  line-height: 1.15;
+}
+
+#streakChart{
+  width: 100%;
+  display: block;
+  margin-top: 10px;
+}
+/*--------------------- END STREAK + CHART (PROGRESS) --------------------- */
 
 /*--------------------- FOOTER --------------------- */
 .footer{
