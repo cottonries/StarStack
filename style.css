@@ -314,6 +314,136 @@ select{
 /*TO HERE ADD TO GITHUB*/
 /*--------------------- END WORKOUT PAGE CSS --------------------- */
 
+
+/*---------------------PROGRESS PAGE CSS --------------------- */
+.cal-toolbar{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:16px;
+  flex-wrap:wrap;
+}
+
+.cal-title{
+  font-weight:800;
+  font-size:18px;
+  flex:1;
+  text-align:center;
+  color:var(--text);
+}
+
+.cal-grid{
+  margin-top:14px;
+  display:grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap:10px;
+}
+
+.cal-weekday{
+  font-size:12px;
+  color:var(--muted);
+  text-align:center;
+  padding:6px 0;
+  font-weight:700;
+}
+
+.cal-cell{
+  border:1px solid var(--border);
+  background:white;
+  border-radius:14px;
+  padding:10px;
+  min-height:76px;
+}
+
+.cal-blank{
+  background:transparent;
+  border:none;
+}
+
+.cal-day{
+  cursor:pointer;
+  text-align:left;
+  transition: transform .06s ease;
+}
+
+.cal-day:hover{
+  transform: translateY(-1px);
+}
+
+.cal-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.cal-num{
+  font-weight:800;
+  color:var(--text);
+}
+
+.cal-dot{
+  width:10px;
+  height:10px;
+  border-radius:999px;
+  background:transparent;
+  border:1px solid var(--border);
+}
+
+.cal-sub{
+  margin-top:8px;
+  font-size:11px;
+  color:var(--muted);
+  line-height:1.2;
+}
+
+.cal-done{
+  border-color: rgba(124,44,255,.35);
+  box-shadow: 0 10px 35px rgba(124,44,255,.10);
+}
+
+.cal-done .cal-dot{
+  background: var(--purple);
+  border-color: var(--purple);
+}
+
+.cal-today{
+  outline: 3px solid rgba(124,44,255,.20);
+}
+
+.cal-detail{
+  margin-top:14px;
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: rgba(255,255,255,.65);
+}
+
+.cal-actions{
+  display:flex;
+  gap:12px;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
+
+/* Mobile */
+@media (max-width: 760px){
+  .cal-title{ text-align:left; }
+  .cal-cell{ min-height:64px; }
+}
+
+.cal-grid{
+  min-height: 420px;
+}
+.cal-day{
+  background: #fff;
+}
+
+
+/*--------------------- END PROGRESS PAGE CSS --------------------- */
+
+
+
 /*--------------------- FOOTER --------------------- */
 .footer{
   background:#0b0f19;
