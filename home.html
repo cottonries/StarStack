@@ -30,8 +30,7 @@
   <a href="home.html" class="active">Home</a>
   <a href="workout.html">Workout</a>
   <a href="progress.html">Progress</a>
-  <button id="logout-btn" class="btn btn-ghost" style="margin-left: 15px;">
-    Logout
+  <a href="profile.html" class="btn btn-ghost" style="margin-left: 15px;">  Profile </a>
   </button>
       </nav>
 
@@ -146,7 +145,6 @@
 
    <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAyHQEc2TKcxERFu_-POYGp6fR_qTyBQK4",
@@ -161,7 +159,6 @@
   const auth = getAuth(app);
 
   const greeting = document.getElementById("user-greeting");
-  const logoutBtn = document.getElementById("logout-btn");
   const mainWelcome = document.getElementById("main-welcome");
 
 onAuthStateChanged(auth, (user) => {
@@ -185,15 +182,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-  logoutBtn.addEventListener("click", () => {
-    signOut(auth)
-      .then(() => {
-        window.location.href = "index.html";
-      })
-      .catch((error) => {
-        console.error("Logout error:", error);
-      });
-  });
 </script>
 </body>
 </html>
