@@ -59,16 +59,20 @@ function saveLog(log) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(log));
 }
 
-// Called when user clicks "Find Workout"
+// Called when user clicks "Log Workout"
 function logWorkout(intensity, equipment) {
   const todayISO = toISODate(new Date());
   const log = loadLog();
 
-  log[todayISO] = {
+  if (!Array.isArray(log[todayISO])) {
+    log[todayISO] = [];
+  }
+
+  log[todayISO].push({
     intensity,
     equipment,
     ts: Date.now()
-  };
+  });
 
   saveLog(log);
 }
@@ -207,28 +211,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const intensityEl = document.getElementById("intensity");
   const equipmentEl = document.getElementById("equipment");
   const findBtn = document.getElementById("findBtn");
+  const logWorkoutBtn = document.getElementById("logWorkoutBtn");
   const player = document.getElementById("player");
   const msg = document.getElementById("msg");
-  
-/* THIS NEEDS LINKS FROM OTHER GROUP MEMBERS WHO CREATED PLAYLISTS */
+
+  /* THIS NEEDS LINKS FROM OTHER GROUP MEMBERS WHO CREATED PLAYLISTS */
   const PLAYLISTS = {
-    easy: {  
+    easy: {
       none: "PLoc73631HFejnrFbIlSLXG9R1LLHuUmWX",
       dumbbells: "PLhHXVTMoVJN7eZslVmQ9-bZcK7ufQfmq_",
       yoga_mat: "PLux1QALV3rOuDP6bJ059AX2kKH-PWkSih",
-      bands:"PLrpq5Rd6OQUq-LDRPgVnYTZcVYC0ilVEg",
+      bands: "PLrpq5Rd6OQUq-LDRPgVnYTZcVYC0ilVEg",
     },
     medium: {
-      none:"PL-QBwSWQqkd9Z4HtlDJ-WYIr3n8quyxGL",
+      none: "PL-QBwSWQqkd9Z4HtlDJ-WYIr3n8quyxGL",
       dumbbells: "PLhHXVTMoVJN4Dst3Z6LFb7z10-mtSqqTf",
       yoga_mat: "PLux1QALV3rOuQVVJTdtF2UkO_KYJc5EOj",
-      bands:"PLrpq5Rd6OQUo4jk9H-D3H4oO7RIJZQiMT",
+      bands: "PLrpq5Rd6OQUo4jk9H-D3H4oO7RIJZQiMT",
     },
     hard: {
-      none:"PL-QBwSWQqkd_rPVP8L7Ygjo_NnX-cfjOT",
+      none: "PL-QBwSWQqkd_rPVP8L7Ygjo_NnX-cfjOT",
       dumbbells: "PLhHXVTMoVJN70baFfYDS9nQ05x8tyBaq3",
       yoga_mat: "PLux1QALV3rOuTeMq7kzrnwHhAl-b3VK0c",
-      bands:"PLrpq5Rd6OQUoUmdZ172BpwCdAo52-m7Ed",
+      bands: "PLrpq5Rd6OQUoUmdZ172BpwCdAo52-m7Ed",
     },
   };
 
@@ -256,12 +261,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     player.src = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&rel=0`;
-
     msg.textContent = `Playing: ${intensity.toLowerCase()} + ${equipment.replace("_", " ").toLowerCase()}`;
     currentWorkout = { intensity, equipment };
   });
-// FOR CALENDAR LOGGING OF A WORKOUT COMPLETED
-if (logWorkoutBtn) {
+
+  if (logWorkoutBtn) {
     logWorkoutBtn.addEventListener("click", () => {
       if (!currentWorkout) {
         msg.textContent = "Find a workout first, then log it.";
@@ -271,6 +275,7 @@ if (logWorkoutBtn) {
       logWorkout(currentWorkout.intensity, currentWorkout.equipment);
       msg.textContent = `Workout logged: ${currentWorkout.intensity.toLowerCase()} + ${currentWorkout.equipment.replace("_", " ").toLowerCase()}`;
     });
+  }
 });
 /*----------------------------END WORKOUT.HTML LOGIC----------------------------*/
 
@@ -354,16 +359,18 @@ document.addEventListener("DOMContentLoaded", () => {
       const d = new Date(year, month, day);
       const iso = toISODate(d);
       const entry = log[iso];
+      const workouts = Array.isArray(entry) ? entry : entry ? [entry] : [];
 
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "cal-cell cal-day";
 
       if (iso === todayISO) btn.classList.add("cal-today");
-      if (entry) btn.classList.add("cal-done");
+      if (workouts.length > 0) btn.classList.add("cal-done");
 
-      const equipmentPretty = entry?.equipment ? entry.equipment.replace("_", " ") : "";
-      const label = entry ? `${entry.intensity.toUpperCase()} · ${equipmentPretty.toUpperCase()}` : "";
+const label = workouts.length > 0
+  ? `${workouts.length} workout${workouts.length > 1 ? "s" : ""}`
+  : "";
 
       btn.innerHTML = `
         <div class="cal-top">
@@ -373,11 +380,19 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="cal-sub">${label}</div>
       `;
 
-      btn.addEventListener("click", () => {
-        calDetail.innerHTML = entry
-          ? `<p class="feature-text" style="margin:0;"><strong>${iso}</strong><br>${entry.intensity.toUpperCase()} + ${equipmentPretty.toUpperCase()}</p>`
-          : `<p class="feature-text" style="margin:0;"><strong>${iso}</strong>: No workout logged.</p>`;
-      });
+btn.addEventListener("click", () => {
+  if (workouts.length === 0) {
+    calDetail.innerHTML = `<p class="feature-text" style="margin:0;"><strong>${iso}</strong>: No workout logged.</p>`;
+    return;
+  }
+
+  const workoutLines = workouts.map(w => {
+    const prettyEquipment = w.equipment.replace("_", " ").toUpperCase();
+    return `${w.intensity.toUpperCase()} + ${prettyEquipment}`;
+  }).join("<br>");
+
+  calDetail.innerHTML = `<p class="feature-text" style="margin:0;"><strong>${iso}</strong><br>${workoutLines}</p>`;
+});
 
       calGrid.appendChild(btn);
     }
@@ -404,10 +419,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // show today's detail
     const iso = toISODate(now);
-    const entry = loadLog()[iso];
-    calDetail.innerHTML = entry
-      ? `<p class="feature-text" style="margin:0;"><strong>${iso}</strong><br>${entry.intensity.toUpperCase()} + ${entry.equipment.replace("_"," ").toUpperCase()}</p>`
-      : `<p class="feature-text" style="margin:0;"><strong>${iso}</strong>: No workout logged.</p>`;
+const entry = loadLog()[iso];
+const workouts = Array.isArray(entry) ? entry : entry ? [entry] : [];
+
+calDetail.innerHTML = workouts.length > 0
+  ? `<p class="feature-text" style="margin:0;"><strong>${iso}</strong><br>${workouts.map(w =>
+      `${w.intensity.toUpperCase()} + ${w.equipment.replace("_", " ").toUpperCase()}`
+    ).join("<br>")}</p>`
+  : `<p class="feature-text" style="margin:0;"><strong>${iso}</strong>: No workout logged.</p>`;
   });
 
   // initial render
