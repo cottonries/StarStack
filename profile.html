@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StarStack Profile</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="profile-page">
+
+<header class="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="logo">✦</div>
+        <div>StarStack</div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="home.html">Home</a>
+        <a href="workout.html">Workout</a>
+        <a href="progress.html">Progress</a>
+        <a href="profile.html" class="active">Profile</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="features">
+  <div class="container">
+    <div class="profile-shell">
+      <p id="profile-status" class="profile-status">Loading your profile...</p>
+
+      <section id="profile-main" class="profile-main" hidden>
+        <section class="hero-card">
+          <img id="hero-avatar-image" class="hero-avatar-image" alt="Profile avatar" hidden />
+          <div id="hero-avatar-fallback" class="hero-avatar" aria-hidden="true">SS</div>
+
+          <h1 id="profile-display-name">User</h1>
+          <p class="hero-subtitle">Account & Settings</p>
+
+          <div class="hero-stats">
+            <article class="stat">
+              <h2 id="profile-member-since">-</h2>
+              <p>Member since</p>
+            </article>
+            <article class="stat">
+              <h2 id="profile-email-short">-</h2>
+              <p>Email</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="settings-card" aria-label="Profile settings">
+          <article class="setting-row">
+            <div>
+              <p class="setting-label">Display name</p>
+              <p id="profile-name" class="setting-value">-</p>
+            </div>
+          </article>
+
+          <article class="setting-row">
+            <div>
+              <p class="setting-label">Email address</p>
+              <p id="profile-email" class="setting-value setting-value-email">-</p>
+            </div>
+          </article>
+
+          <article class="setting-row">
+            <div>
+              <p class="setting-label">Avatar</p>
+              <p class="setting-value-avatar">Choose a profile avatar</p>
+
+              <div id="avatar-picker" class="avatar-picker" role="radiogroup" aria-label="Choose avatar">
+                <button class="avatar-choice" type="button" data-avatar="google" aria-pressed="false" title="Use Google photo">G</button>
+                <button class="avatar-choice" type="button" data-avatar="fox" aria-pressed="false" title="Fox">🦊</button>
+                <button class="avatar-choice" type="button" data-avatar="owl" aria-pressed="false" title="Owl">🦉</button>
+                <button class="avatar-choice" type="button" data-avatar="panda" aria-pressed="false" title="Panda">🐼</button>
+                <button class="avatar-choice" type="button" data-avatar="whale" aria-pressed="false" title="Whale">🐋</button>
+                <button class="avatar-choice" type="button" data-avatar="cat" aria-pressed="false" title="Cat">🐱</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="setting-row">
+            <div>
+              <p class="setting-label">Account</p>
+              <p class="setting-value-avatar">Sign out of StarStack</p>
+            </div>
+            <button id="profile-logout-btn" class="profile-logout-btn" type="button">Logout</button>
+          </article>
+        </section>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo light">✦</div>
+        <div>StarStack</div>
+      </div>
+
+      <div>
+        <p>Contact: wangs99@uw.edu</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="disclaimer">
+        StarStack does not provide medical advice. Content is for informational purposes only.
+      </p>
+      <p class="copyright">
+        © 2026 StarStack. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
