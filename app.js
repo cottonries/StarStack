@@ -1,4 +1,21 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
+const firebaseConfig = {
+  apiKey: "AIzaSyAyHQEc2TKcxERFu_-POYGp6fR_qTyBQK4",
+  authDomain: "starstack-7951e.firebaseapp.com",
+  projectId: "starstack-7951e",
+  storageBucket: "starstack-7951e.firebasestorage.app",
+  messagingSenderId: "539252727920",
+  appId: "1:539252727920:web:647722f0ad9554562a54b5"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
 /*----------------------------WORKOUT LOGGING (SHARED BY WORKOUT.HTML AND PROGRESS.HTML)----------------------------*/
 
 const STORAGE_KEY = "starstack_workout_log_v1";
@@ -387,3 +404,190 @@ document.addEventListener("DOMContentLoaded", () => {
   if (quoteSub) quoteSub.textContent = q.sub;
 });
 /*----------------------------END HOME.HTML LOGIC (QUOTES)----------------------------*/
+
+/*----------------------------PROFILE.HTML LOGIC----------------------------*/
+document.addEventListener("DOMContentLoaded", () => {
+  const profileMain = document.getElementById("profile-main");
+  const avatarPicker = document.getElementById("avatar-picker");
+
+  // If we're not on profile.html, exit silently
+  if (!profileMain || !avatarPicker) return;
+
+  const AVATAR_PRESET_KEY = "starstackAvatarPreset";
+
+  const AVATAR_PRESETS = {
+    google: { emoji: "G", background: "linear-gradient(160deg, #dbe8ff, #bdd9f1)" },
+    fox: { emoji: "🦊", background: "linear-gradient(160deg, #ffd7ad, #f1a35f)" },
+    owl: { emoji: "🦉", background: "linear-gradient(160deg, #e5d6ff, #bca8f1)" },
+    panda: { emoji: "🐼", background: "linear-gradient(160deg, #e4eef5, #bdd0de)" },
+    whale: { emoji: "🐋", background: "linear-gradient(160deg, #c7ebff, #8fc3e7)" },
+    cat: { emoji: "🐱", background: "linear-gradient(160deg, #ffe2cf, #f4b28c)" }
+  };
+
+  const profileStatus = document.getElementById("profile-status");
+  const heroAvatarImage = document.getElementById("hero-avatar-image");
+  const heroAvatarFallback = document.getElementById("hero-avatar-fallback");
+  const profileDisplayName = document.getElementById("profile-display-name");
+  const profileName = document.getElementById("profile-name");
+  const profileEmail = document.getElementById("profile-email");
+  const profileEmailShort = document.getElementById("profile-email-short");
+  const profileMemberSince = document.getElementById("profile-member-since");
+  const logoutButton = document.getElementById("profile-logout-btn");
+
+  let currentAvatarUrl = "";
+  let currentInitials = "SS";
+
+  function getInitials(displayName, email) {
+    const source = displayName?.trim() || email?.split("@")[0] || "User";
+    const parts = source.split(/\s+/).filter(Boolean);
+
+    if (parts.length === 1) {
+      return parts[0].slice(0, 2).toUpperCase();
+    }
+
+    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  }
+
+  function formatMemberSince(dateValue) {
+    if (!dateValue) return "-";
+
+    const date = new Date(dateValue);
+    if (Number.isNaN(date.getTime())) return "-";
+
+    return new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    }).format(date);
+  }
+
+  function getSelectedAvatarPreset() {
+    const value = localStorage.getItem(AVATAR_PRESET_KEY) || "google";
+    return AVATAR_PRESETS[value] ? value : "google";
+  }
+
+  function setSelectedAvatarPreset(presetId) {
+    if (!AVATAR_PRESETS[presetId]) return;
+    localStorage.setItem(AVATAR_PRESET_KEY, presetId);
+  }
+
+  function applyPresetAvatar(fallbackElement, presetId) {
+    const preset = AVATAR_PRESETS[presetId];
+
+    if (!preset || presetId === "google") {
+      fallbackElement.classList.remove("avatar-custom");
+      fallbackElement.style.background = "";
+      return false;
+    }
+
+    fallbackElement.classList.add("avatar-custom");
+    fallbackElement.textContent = preset.emoji;
+    fallbackElement.style.background = preset.background;
+    return true;
+  }
+
+  function setAvatar(imageElement, fallbackElement, avatarUrl, initials, presetId) {
+    const usingPreset = applyPresetAvatar(fallbackElement, presetId);
+
+    if (usingPreset) {
+      imageElement.hidden = true;
+      fallbackElement.hidden = false;
+      return;
+    }
+
+    if (avatarUrl) {
+      imageElement.src = avatarUrl;
+      imageElement.hidden = false;
+      fallbackElement.hidden = true;
+      fallbackElement.style.background = "";
+      fallbackElement.classList.remove("avatar-custom");
+      return;
+    }
+
+    imageElement.hidden = true;
+    fallbackElement.hidden = false;
+    fallbackElement.textContent = initials;
+    fallbackElement.style.background = "";
+    fallbackElement.classList.remove("avatar-custom");
+  }
+
+  function updateAvatarPickerUi() {
+    const selected = getSelectedAvatarPreset();
+    const choices = avatarPicker.querySelectorAll(".avatar-choice");
+
+    choices.forEach((choice) => {
+      const isActive = choice.dataset.avatar === selected;
+      choice.classList.toggle("is-active", isActive);
+      choice.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+  }
+
+  function applyCurrentAvatarToProfile() {
+    const presetId = getSelectedAvatarPreset();
+    setAvatar(
+      heroAvatarImage,
+      heroAvatarFallback,
+      currentAvatarUrl,
+      currentInitials,
+      presetId
+    );
+  }
+
+  function revealProfile() {
+    profileMain.hidden = false;
+    if (profileStatus) profileStatus.hidden = true;
+  }
+
+  avatarPicker.querySelectorAll(".avatar-choice").forEach((choice) => {
+    choice.addEventListener("click", () => {
+      const selected = choice.dataset.avatar;
+      if (!AVATAR_PRESETS[selected]) return;
+
+      setSelectedAvatarPreset(selected);
+      updateAvatarPickerUi();
+      applyCurrentAvatarToProfile();
+    });
+  });
+
+  if (logoutButton) {
+    logoutButton.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        window.location.href = "index.html";
+      } catch (error) {
+        console.error("Logout error:", error);
+      }
+    });
+  }
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "index.html";
+      return;
+    }
+
+    const displayName = user.displayName || "User";
+    const email = user.email || "-";
+    const initials = getInitials(displayName, email);
+    const avatarUrl = user.photoURL || "";
+
+    currentAvatarUrl = avatarUrl;
+    currentInitials = initials;
+
+    if (profileDisplayName) profileDisplayName.textContent = displayName;
+    if (profileName) profileName.textContent = displayName;
+    if (profileEmail) profileEmail.textContent = email;
+    if (profileEmailShort) {
+      profileEmailShort.textContent =
+        email.length > 14 ? email.slice(0, 14) + "..." : email;
+    }
+    if (profileMemberSince) {
+      profileMemberSince.textContent = formatMemberSince(user.metadata.creationTime);
+    }
+
+    applyCurrentAvatarToProfile();
+    updateAvatarPickerUi();
+    revealProfile();
+  });
+});
+/*----------------------------END PROFILE.HTML LOGIC----------------------------*/
