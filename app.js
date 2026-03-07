@@ -16,6 +16,27 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
+
+/*----------------------------HOME.HTML AUTH LOGIC----------------------------*/
+document.addEventListener("DOMContentLoaded", () => {
+  const mainWelcome = document.getElementById("main-welcome");
+
+  if (!mainWelcome) return;
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const firstName = user.displayName
+        ? user.displayName.split(" ")[0]
+        : "User";
+
+      mainWelcome.textContent = `Welcome to StarStack ${firstName}`;
+    } else {
+      window.location.href = "index.html";
+    }
+  });
+});
+/*----------------------------END HOME.HTML AUTH LOGIC----------------------------*/
+
 /*----------------------------WORKOUT LOGGING (SHARED BY WORKOUT.HTML AND PROGRESS.HTML)----------------------------*/
 
 const STORAGE_KEY = "starstack_workout_log_v1";
