@@ -82,12 +82,16 @@
           </label>
         </div>
 
-        <button id="findBtn" class="btn btn-primary">Find Workout</button>
+        <button id="findBtn" class="btn btn-ghost">Find Workout</button>
         <p id="msg" class="status"></p>
 
         <div class="player-wrap">
 <iframe id="player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>
         </div>
+        
+        <div class="player-actions">
+  <button id="logWorkoutBtn" class="btn btn-ghost" type="button">Log Workout</button>
+</div>
 
       </div>
     </div>
@@ -128,57 +132,6 @@
 
 <script type="module" src="app.js"></script>
    
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAyHQEc2TKcxERFu_-POYGp6fR_qTyBQK4",
-    authDomain: "starstack-7951e.firebaseapp.com",
-    projectId: "starstack-7951e",
-    storageBucket: "starstack-7951e.firebasestorage.app",
-    messagingSenderId: "539252727920",
-    appId: "1:539252727920:web:647722f0ad9554562a54b5"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  const logoutBtn = document.getElementById("logout-btn");
-  const navUser = document.getElementById("nav-user");
-
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      window.location.href = "index.html";
-      return;
-    }
-
-    const firstName = user.displayName
-      ? user.displayName.split(" ")[0]
-      : "User";
-
-    // Update navbar name
-    if (navUser) {
-      navUser.textContent = `Signed in: ${firstName}`;
-    }
-
-    // If home page greeting exists
-    const homeGreeting = document.getElementById("user-greeting");
-    if (homeGreeting) {
-      homeGreeting.textContent = `Signed in: ${firstName}`;
-    }
-  });
-
-  logoutBtn.addEventListener("click", () => {
-    signOut(auth)
-      .then(() => {
-        window.location.href = "index.html";
-      })
-      .catch((error) => {
-        console.error("Logout error:", error);
-      });
-  });
-</script>
 </body>
 </html>
 <!----END FOOTER--->
