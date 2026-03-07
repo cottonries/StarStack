@@ -598,15 +598,15 @@ img, iframe, video, canvas {
   justify-content: space-between;
 }
 
-/*---------------- PROFILE PAGE ----------------*/
-
-.profile-page .features{
-  padding: 48px 0 70px;
-  border-top: none;
+/* PROFILE LAYOUT WRAPPER */
+.profile-layout{
+  padding: 50px 0 70px;
 }
 
+/*---------------- PROFILE PAGE ----------------*/
+
 .profile-shell{
-  max-width: 860px;
+  max-width: 700px;
   margin: 0 auto;
 }
 
@@ -846,9 +846,59 @@ img, iframe, video, canvas {
   box-shadow: 0 14px 30px rgba(124,44,255,.18);
 }
 
+/* Nav avatar */
+.nav-profile-link{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+
+.nav-profile-link:hover{
+  transform: translateY(-1px);
+  border-color: rgba(124,44,255,.28);
+  box-shadow: 0 10px 20px rgba(124,44,255,.14);
+}
+
+.nav-avatar-image,
+.nav-avatar-fallback{
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.nav-avatar-image{
+  display: block;
+  object-fit: cover;
+}
+
+.nav-avatar-image[hidden],
+.nav-avatar-fallback[hidden]{
+  display: none !important;
+}
+
+.nav-avatar-fallback{
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  font-weight: 800;
+  color: #1a2233;
+  background: linear-gradient(160deg, #ece8ff, #d8d0ff);
+}
+
+.nav-avatar-fallback.avatar-custom{
+  font-size: 16px;
+}
+
 /* Mobile */
 @media (max-width: 760px){
-  .profile-page .features{
+  .profile-layout{
     padding: 28px 0 46px;
   }
 
