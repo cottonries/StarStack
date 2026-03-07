@@ -546,6 +546,8 @@ document.addEventListener("DOMContentLoaded", () => {
       setSelectedAvatarPreset(selected);
       updateAvatarPickerUi();
       applyCurrentAvatarToProfile();
+
+      location.reload(); // refresh nav avatar
     });
   });
 
