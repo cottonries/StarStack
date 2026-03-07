@@ -19,26 +19,21 @@
    
 <header class="nav">
   <div class="container">
-    <div class="nav-inner" style="justify-content: space-between;">
-      
+    <div class="nav-inner">
       <div class="brand">
         <div class="logo">✦</div>
         <div>StarStack</div>
       </div>
 
       <nav class="nav-links">
-        <a href="home.html" >Home</a> 
+        <a href="home.html" class="active">Home</a>
         <a href="workout.html">Workout</a>
-        <a href="progress.html" class="active" >Progress</a> <!--ACTIVE TAB IS PROGRESS PAGE-->
-        <span id="nav-user" style="margin-left: 20px; font-weight: 500;">
-    Loading...
-  </span>
-        
-        <button id="logout-btn" class="btn btn-ghost" style="margin-left: 15px;">
-    Logout
-  </button>
+        <a href="progress.html">Progress</a>
+        <a href="profile.html" class="nav-profile-link" aria-label="Profile">
+          <img id="nav-avatar-image" class="nav-avatar-image" alt="Profile" hidden>
+          <div id="nav-avatar-fallback" class="nav-avatar-fallback">SS</div>
+        </a>
       </nav>
-
     </div>
   </div>
 </header>
