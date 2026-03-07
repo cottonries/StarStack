@@ -314,6 +314,12 @@ select{
   border:0;
 }
 
+.player-actions{
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
 /*TO HERE ADD TO GITHUB*/
 /*--------------------- END WORKOUT PAGE CSS --------------------- */
 
