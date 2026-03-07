@@ -86,6 +86,7 @@ body::before{
   height: 72px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 .brand{
   display: flex;
@@ -112,6 +113,7 @@ body::before{
   display:flex;
   gap:20px;
   align-items:center;
+  flex-wrap: wrap;
 }
 
 .nav-links a{
@@ -175,6 +177,8 @@ body::before{
   transform: translateY(0px);
   box-shadow: none;
 }
+
+
 /*--------------------- END NAV --------------------- */
 
 
@@ -525,27 +529,35 @@ img, iframe, video, canvas {
 @media (max-width: 760px){
   .nav-inner{
     height: auto;
-    padding: 14px 0;
+    padding: 12px 0;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 12px;
+  }
+
+  .brand{
+    justify-content: center;
   }
 
   .nav-links{
     width: 100%;
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: flex-start;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
   }
 
   .nav-links a,
   .nav-links button{
     font-size: 14px;
+    white-space: nowrap;
   }
 
-  #logout-btn{
-    margin-left: 0 !important;
+  .nav-profile-link{
+    width: 36px;
+    height: 36px;
+    flex: 0 0 auto;
   }
 
   .hero{
@@ -589,13 +601,6 @@ img, iframe, video, canvas {
   .container{
     padding: 0 16px;
   }
-}
-
-.nav-inner{
-  height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 /* PROFILE LAYOUT WRAPPER */
@@ -857,7 +862,23 @@ img, iframe, video, canvas {
     align-items: flex-start;
     padding: 18px 16px;
   }
+}
+@media (max-width: 480px){
+  .nav-links{
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: nowrap;
+  }
 
+  .nav-links a{
+    font-size: 13px;
+  }
+
+  .nav-profile-link{
+    width: 34px;
+    height: 34px;
+  }
+}
 
 /*---------------- END PROFILE PAGE ----------------*/
 
