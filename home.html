@@ -142,47 +142,7 @@
   </div>
 </footer>
 
-
-   <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAyHQEc2TKcxERFu_-POYGp6fR_qTyBQK4",
-    authDomain: "starstack-7951e.firebaseapp.com",
-    projectId: "starstack-7951e",
-    storageBucket: "starstack-7951e.firebasestorage.app",
-    messagingSenderId: "539252727920",
-    appId: "1:539252727920:web:647722f0ad9554562a54b5"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  const greeting = document.getElementById("user-greeting");
-  const mainWelcome = document.getElementById("main-welcome");
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const firstName = user.displayName
-      ? user.displayName.split(" ")[0]
-      : "User";
-
-    // Nav (keep this working)
-    if (greeting) {
-      greeting.textContent = `Signed in: ${firstName}`;
-    }
-
-    // Hero (add this)
-    if (mainWelcome) {
-      mainWelcome.textContent = `Welcome to StarStack ${firstName}`;
-    }
-
-  } else {
-    window.location.href = "index.html";
-  }
-});
-
-</script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
 <!----END FOOTER--->
