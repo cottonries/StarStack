@@ -232,7 +232,9 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   };
 
-  if (!findBtn) return; 
+  if (!findBtn || !player || !msg) return;
+
+  let currentWorkout = null;
 
   findBtn.addEventListener("click", () => {
     const intensity = intensityEl?.value;
@@ -241,6 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!intensity || !equipment) {
       msg.textContent = "Please select both intensity and equipment.";
       player.src = "";
+      currentWorkout = null;
       return;
     }
 
@@ -248,20 +251,26 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!playlistId) {
       msg.textContent = "No playlist found.";
       player.src = "";
+      currentWorkout = null;
       return;
     }
 
     player.src = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&rel=0`;
 
-    msg.textContent = `Playing: ${intensity.toLowerCase()} + ${equipment
-      .replace("_", " ")
-      .toLowerCase()}`;
-
-    // FOR CALENDAR LOGGING OF A WORKOUT COMPLETED
-    if (typeof logWorkout === "function") {
-      logWorkout(intensity, equipment);
-    }
+    msg.textContent = `Playing: ${intensity.toLowerCase()} + ${equipment.replace("_", " ").toLowerCase()}`;
+    currentWorkout = { intensity, equipment };
   });
+// FOR CALENDAR LOGGING OF A WORKOUT COMPLETED
+if (logWorkoutBtn) {
+    logWorkoutBtn.addEventListener("click", () => {
+      if (!currentWorkout) {
+        msg.textContent = "Find a workout first, then log it.";
+        return;
+      }
+
+      logWorkout(currentWorkout.intensity, currentWorkout.equipment);
+      msg.textContent = `Workout logged: ${currentWorkout.intensity.toLowerCase()} + ${currentWorkout.equipment.replace("_", " ").toLowerCase()}`;
+    });
 });
 /*----------------------------END WORKOUT.HTML LOGIC----------------------------*/
 
