@@ -68,10 +68,12 @@ body::before{
 /*--------------------- NAV --------------------- */
 .nav{
   border-bottom: 1px solid var(--border);
-  background:#ffffff;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 1000;
   transition: box-shadow .2s ease, background .2s ease, backdrop-filter .2s ease;
 }
 
@@ -113,7 +115,6 @@ body::before{
   display:flex;
   gap:20px;
   align-items:center;
-  flex-wrap: wrap;
 }
 
 .nav-links a{
@@ -293,9 +294,7 @@ select{
   border-radius:14px;
   border:1px solid var(--border);
 }
-.btn-primary:hover{
-  background:var(--purple-dark);
-}
+
 .status{
   margin-top:12px;
   color:var(--muted);
@@ -510,10 +509,12 @@ select{
 }
 /*--------------------- END FOOTER --------------------- */
 
-html, body {
+html {
   max-width: 100%;
   overflow-x: hidden;
 }
+
+
 
 img, iframe, video, canvas {
   max-width: 100%;
