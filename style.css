@@ -443,17 +443,71 @@ select{
 }
 
 /* Mobile */
-@media (max-width: 760px){
-  .cal-title{ text-align:left; }
-  .cal-cell{ min-height:64px; }
+
+@media (max-width: 768px) {
+  .cal-toolbar {
+    gap: 8px;
+  }
+
+  .cal-title {
+    font-size: 16px;
+    min-width: 100%;
+    order: -1;
+  }
+
+  .cal-grid {
+    gap: 6px;
+  }
+
+  .cal-weekday {
+    font-size: 11px;
+  }
+
+  .cal-cell {
+    min-height: 58px;
+    padding: 6px;
+    border-radius: 12px;
+    min-width: 0;
+  }
+
+  .cal-num {
+    font-size: 14px;
+  }
+
+  .cal-sub {
+    margin-top: 4px;
+    font-size: 10px;
+  }
+
+  .cal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cal-actions .btn {
+    width: 100%;
+  }
+  .cal-grid,
+.cal-toolbar,
+.cal-detail,
+.feature-card {
+  min-width: 0;
 }
 
-.cal-grid{
-  min-height: 420px;
+.cal-top{
+  gap: 4px;
 }
-.cal-day{
-  background: #fff;
+
+.cal-dot{
+  width: 8px;
+  height: 8px;
 }
+
+.cal-cell{
+  min-width: 0;
+}
+}
+
 /*--------------------- END PROGRESS PAGE CSS --------------------- */
 
 
@@ -522,11 +576,10 @@ select{
 }
 /*--------------------- END FOOTER --------------------- */
 
-html {
+html, body {
   max-width: 100%;
   overflow-x: hidden;
 }
-
 
 
 img, iframe, video, canvas {
