@@ -528,7 +528,8 @@ select{
   border: 1px solid rgba(124,44,255,.12);
   border-radius: 18px;
   padding: 16px;
-  box-shadow: 0 10px 35px rgba(15,23,42,.06);
+  box-shadow: 0 10px 35px rgba(15,23,42,.06),
+  0 0 40px rgba(124,44,255,.08);
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
 
