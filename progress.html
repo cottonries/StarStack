@@ -20,8 +20,6 @@
 <header class="nav">
   <div class="container">
     <div class="nav-inner">
-      <div class="brand">
-
       <a href="index.html" class="brand">
         <div class="logo">✦</div>
         <div>StarStack</div>
@@ -30,7 +28,7 @@
       <nav class="nav-links">
         <a href="home.html">Home</a>
         <a href="workout.html">Workout</a>
-        <a href="progress.html"class="active">Progress</a>
+        <a href="progress.html" class="active">Progress</a>
         <a href="profile.html" class="nav-profile-link" aria-label="Profile">
           <img id="nav-avatar-image" class="nav-avatar-image" alt="Profile" hidden>
           <div id="nav-avatar-fallback" class="nav-avatar-fallback"></div>
@@ -60,8 +58,7 @@
       <p class="kicker">Calendar</p>
       <h2 class="feature-title">Workout history</h2>
       <p class="feature-text">
-        A day gets marked when you click <strong>Find Workout</strong> on the workout page.
-      </p>
+         A day gets marked when you click <strong>Log Workout</strong> on the workout page.
 
       <div class="cal-toolbar">
         <button class="btn btn-ghost" id="calPrev" type="button">←</button>
@@ -80,12 +77,9 @@
 <div class="streak-wrap">
   <div class="streak-card">
     <p class="kicker">Streak</p>
-    <h3 class="streak-title">
-      You’ve worked out <span id="streakCount">0</span> days in a row 🔥
-    </h3>
-    <p class="feature-text" id="streakSubtext" style="margin:6px 0 0;">
-      Log a workout today to start your streak.
-    </p>
+  <h3 class="streak-title">
+  <span id="streakMessage">Log a workout today to start your streak.</span>
+  </h3>
 
     <p class="feature-text" style="margin:6px 0 0;">
       Longest streak: <strong><span id="longestStreak">0</span></strong> days
@@ -133,57 +127,6 @@
     </div>
   </div>
 </footer>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAyHQEc2TKcxERFu_-POYGp6fR_qTyBQK4",
-    authDomain: "starstack-7951e.firebaseapp.com",
-    projectId: "starstack-7951e",
-    storageBucket: "starstack-7951e.firebasestorage.app",
-    messagingSenderId: "539252727920",
-    appId: "1:539252727920:web:647722f0ad9554562a54b5"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  const logoutBtn = document.getElementById("logout-btn");
-  const navUser = document.getElementById("nav-user");
-
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      window.location.href = "index.html";
-      return;
-    }
-
-    const firstName = user.displayName
-      ? user.displayName.split(" ")[0]
-      : "User";
-
-    // Update navbar name
-    if (navUser) {
-      navUser.textContent = `Signed in: ${firstName}`;
-    }
-
-    // If home page greeting exists
-    const homeGreeting = document.getElementById("user-greeting");
-    if (homeGreeting) {
-      homeGreeting.textContent = `Signed in: ${firstName}`;
-    }
-  });
-
-  logoutBtn.addEventListener("click", () => {
-    signOut(auth)
-      .then(() => {
-        window.location.href = "index.html";
-      })
-      .catch((error) => {
-        console.error("Logout error:", error);
-      });
-  });
-</script>
 </body>
 </html>
 <!----END FOOTER--->
