@@ -1,0 +1,23 @@
+{
+  "name": "starstack",
+  "version": "1.0.0",
+  "description": "StarStack is a cardio-focused fitness website designed to help users find workouts that fit their individual needs. The site will use user-based interaction to select workout criteria such as intensity level and workout type. Based on these selections, StarStack will display an embedded YouTube video that matches the chosen criteria, allowing users to quickly access guided cardio workouts without needing to search manually.",
+  "main": "app.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cottonries/StarStack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/cottonries/StarStack/issues"
+  },
+  "homepage": "https://github.com/cottonries/StarStack#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.3.5"
+  }
+}
