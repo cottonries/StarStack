@@ -131,7 +131,9 @@ function buildLastNDaysSeries(n = 14) {
 
     const iso = toISODate(d);
     labels.push(`${d.getMonth() + 1}/${d.getDate()}`); // M/D
-    values.push(log[iso] ? 1 : 0); // 1 if workout logged else 0
+    const entry = log[iso];
+const workouts = Array.isArray(entry) ? entry.length : entry ? 1 : 0;
+values.push(workouts);
   }
 
   return { labels, values };
@@ -176,7 +178,7 @@ function drawLineChart(ctx, labels, values) {
 
   // baseline
   ctx.save();
-  ctx.strokeStyle = "rgba(124, 44, 255, 0.18)";
+  ctx.strokeStyle = "rgba(194,147,230,0.25)";
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(padLeft, padTop + plotH);
@@ -184,62 +186,63 @@ function drawLineChart(ctx, labels, values) {
   ctx.stroke();
   ctx.restore();
 
-  // smooth glowing line
-  ctx.save();
-  ctx.strokeStyle = "#7c2cff";
-  ctx.lineWidth = 4;
-  ctx.lineJoin = "round";
-  ctx.lineCap = "round";
-  ctx.shadowColor = "rgba(124, 44, 255, 0.55)";
-  ctx.shadowBlur = 18;
-
-  ctx.beginPath();
-
+  // subtle fill under line
   if (points.length > 0) {
-    ctx.moveTo(points[0].x, points[0].y);
+    const fillGradient = ctx.createLinearGradient(0, padTop, 0, padTop + plotH);
+fillGradient.addColorStop(0, "rgba(194,147,230,0.18)");
+fillGradient.addColorStop(1, "rgba(194,147,230,0.03)");
 
-    for (let i = 0; i < points.length - 1; i++) {
-      const current = points[i];
-      const next = points[i + 1];
+    ctx.save();
+    ctx.fillStyle = fillGradient;
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, padTop + plotH);
 
-      const midX = (current.x + next.x) / 2;
-      const midY = (current.y + next.y) / 2;
+    points.forEach((p, i) => {
+      if (i === 0) ctx.lineTo(p.x, p.y);
+      else ctx.lineTo(p.x, p.y);
+    });
 
-      ctx.quadraticCurveTo(current.x, current.y, midX, midY);
-    }
-
-    const last = points[points.length - 1];
-    ctx.lineTo(last.x, last.y);
+    ctx.lineTo(points[points.length - 1].x, padTop + plotH);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
   }
 
+  // line
+  ctx.save();
+ctx.strokeStyle = "rgb(194,147,230)";
+ctx.lineWidth = 5;
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+ctx.shadowColor = "rgba(194,147,230,0.35)";
+ctx.shadowBlur = 12;
+
+  ctx.beginPath();
+  points.forEach((p, i) => {
+    if (i === 0) ctx.moveTo(p.x, p.y);
+    else ctx.lineTo(p.x, p.y);
+  });
   ctx.stroke();
   ctx.restore();
 
   // dots
   points.forEach((p) => {
     ctx.save();
-    ctx.fillStyle = "rgba(124, 44, 255, 0.22)";
+    ctx.fillStyle = "rgb(194,147,230)";
     ctx.beginPath();
-    ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-
-    ctx.save();
-    ctx.fillStyle = "#7c2cff";
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
+    ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
 
     ctx.save();
     ctx.fillStyle = "rgba(255,255,255,0.95)";
     ctx.beginPath();
-    ctx.arc(p.x, p.y, 1.8, 0, Math.PI * 2);
+    ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
   });
 
-  // x labels
+  // labels
   ctx.save();
   ctx.font = "12px Inter, system-ui, sans-serif";
   ctx.fillStyle = "rgba(92, 102, 122, 0.9)";
