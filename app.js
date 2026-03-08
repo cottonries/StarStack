@@ -140,7 +140,6 @@ function buildLastNDaysSeries(n = 14) {
 function drawLineChart(ctx, labels, values) {
   const canvas = ctx.canvas;
 
-  // HiDPI support
   const dpr = window.devicePixelRatio || 1;
   const cssW = canvas.clientWidth || canvas.width;
   const cssH = canvas.clientHeight || canvas.height;
@@ -153,55 +152,111 @@ function drawLineChart(ctx, labels, values) {
   const h = cssH;
   ctx.clearRect(0, 0, w, h);
 
-  const pad = 18;
-  const plotW = w - pad * 2;
-  const plotH = h - pad * 2;
+  const padLeft = 20;
+  const padRight = 20;
+  const padTop = 24;
+  const padBottom = 34;
+
+  const plotW = w - padLeft - padRight;
+  const plotH = h - padTop - padBottom;
 
   const maxY = Math.max(1, ...values);
   const minY = 0;
 
-  const x = (i) => pad + (i * plotW) / Math.max(1, values.length - 1);
+  const x = (i) => padLeft + (i * plotW) / Math.max(1, values.length - 1);
   const y = (v) => {
     const t = (v - minY) / (maxY - minY || 1);
-    return pad + (1 - t) * plotH;
+    return padTop + (1 - t) * plotH;
   };
 
-  // baseline
-  ctx.globalAlpha = 0.25;
-  ctx.beginPath();
-  ctx.moveTo(pad, pad + plotH);
-  ctx.lineTo(pad + plotW, pad + plotH);
-  ctx.stroke();
-  ctx.globalAlpha = 1;
+  const points = values.map((v, i) => ({
+    x: x(i),
+    y: y(v)
+  }));
 
-  // line
+  // baseline
+  ctx.save();
+  ctx.strokeStyle = "rgba(124, 44, 255, 0.18)";
+  ctx.lineWidth = 2;
   ctx.beginPath();
-  values.forEach((v, i) => {
-    const px = x(i);
-    const py = y(v);
-    if (i === 0) ctx.moveTo(px, py);
-    else ctx.lineTo(px, py);
-  });
+  ctx.moveTo(padLeft, padTop + plotH);
+  ctx.lineTo(padLeft + plotW, padTop + plotH);
   ctx.stroke();
+  ctx.restore();
+
+  // smooth glowing line
+  ctx.save();
+  ctx.strokeStyle = "#7c2cff";
+  ctx.lineWidth = 4;
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+  ctx.shadowColor = "rgba(124, 44, 255, 0.55)";
+  ctx.shadowBlur = 18;
+
+  ctx.beginPath();
+
+  if (points.length > 0) {
+    ctx.moveTo(points[0].x, points[0].y);
+
+    for (let i = 0; i < points.length - 1; i++) {
+      const current = points[i];
+      const next = points[i + 1];
+
+      const midX = (current.x + next.x) / 2;
+      const midY = (current.y + next.y) / 2;
+
+      ctx.quadraticCurveTo(current.x, current.y, midX, midY);
+    }
+
+    const last = points[points.length - 1];
+    ctx.lineTo(last.x, last.y);
+  }
+
+  ctx.stroke();
+  ctx.restore();
 
   // dots
-  values.forEach((v, i) => {
-    const px = x(i);
-    const py = y(v);
+  points.forEach((p) => {
+    ctx.save();
+    ctx.fillStyle = "rgba(124, 44, 255, 0.22)";
     ctx.beginPath();
-    ctx.arc(px, py, 3, 0, Math.PI * 2);
+    ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
     ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.fillStyle = "#7c2cff";
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.fillStyle = "rgba(255,255,255,0.95)";
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 1.8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
   });
 
-  // x labels (a few)
+  // x labels
+  ctx.save();
   ctx.font = "12px Inter, system-ui, sans-serif";
-  ctx.globalAlpha = 0.7;
+  ctx.fillStyle = "rgba(92, 102, 122, 0.9)";
+  ctx.textAlign = "center";
+
   const step = Math.ceil(labels.length / 4);
   for (let i = 0; i < labels.length; i += step) {
-    ctx.fillText(labels[i], x(i) - 8, pad + plotH + 14);
+    ctx.fillText(labels[i], x(i), h - 10);
   }
-  ctx.globalAlpha = 1;
+
+  if ((labels.length - 1) % step !== 0) {
+    ctx.fillText(labels[labels.length - 1], x(labels.length - 1), h - 10);
+  }
+
+  ctx.restore();
 }
+
 /*----------------------------END WORKOUT LOGGING (SHARED BY WORKOUT.HTML AND PROGRESS.HTML)----------------------------*/
 
 
