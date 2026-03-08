@@ -77,6 +77,7 @@ body::before{
   transition: box-shadow .2s ease, background .2s ease, backdrop-filter .2s ease;
 }
 
+
 /* This class will be toggled by JS when you scroll */
 .nav.is-scrolled{
   background: rgba(255,255,255,.85);
@@ -177,6 +178,12 @@ body::before{
 .btn:active{
   transform: translateY(0px);
   box-shadow: none;
+}
+.brand {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
 }
 
 
