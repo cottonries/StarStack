@@ -361,17 +361,21 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderStats() {
     const streakEl = document.getElementById("streakCount");
     const longestEl = document.getElementById("longestStreak");
-    const streakSub = document.getElementById("streakSubtext");
+    const streakMessage = document.getElementById("streakMessage");
 
     const { current, longest } = computeStreakStats();
+    
+    if (streakMessage) {
+    streakMessage.textContent =
+    current === 0
+      ? "Log a workout today to start your streak."
+      : current === 1
+      ? "You’ve worked out 1 day so far."
+      : `You’ve worked out ${current} days in a row.`;
+}
 
     if (streakEl) streakEl.textContent = current;
     if (longestEl) longestEl.textContent = longest;
-
-    if (streakSub) {
-      streakSub.textContent =
-        current > 0 ? "Keep going — don’t break the chain." : "Log a workout today to start your streak.";
-    }
 
     const canvas = document.getElementById("streakChart");
     if (canvas) {
