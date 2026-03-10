@@ -1,3 +1,4 @@
+/*----------------------------FIREBASE LOGIC----------------------------*/
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import {
   getAuth,
@@ -35,7 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-/*----------------------------END HOME.HTML AUTH LOGIC----------------------------*/
 
 /*----------------------------WORKOUT LOGGING (SHARED BY WORKOUT.HTML AND PROGRESS.HTML)----------------------------*/
 
@@ -260,10 +260,6 @@ ctx.shadowBlur = 12;
   ctx.restore();
 }
 
-/*----------------------------END WORKOUT LOGGING (SHARED BY WORKOUT.HTML AND PROGRESS.HTML)----------------------------*/
-
-
-
 /*----------------------------WORKOUT.HTML LOGIC----------------------------*/
 document.addEventListener("DOMContentLoaded", () => {
   const intensityEl = document.getElementById("intensity");
@@ -273,7 +269,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const player = document.getElementById("player");
   const msg = document.getElementById("msg");
 
-  /* THIS NEEDS LINKS FROM OTHER GROUP MEMBERS WHO CREATED PLAYLISTS */
   const PLAYLISTS = {
     easy: {
       none: "PLoc73631HFejnrFbIlSLXG9R1LLHuUmWX",
@@ -335,8 +330,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-/*----------------------------END WORKOUT.HTML LOGIC----------------------------*/
-
 
 /*----------------------------PROGRESS.HTML LOGIC----------------------------*/
 document.addEventListener("DOMContentLoaded", () => {
@@ -495,7 +488,6 @@ calDetail.innerHTML = workouts.length > 0
   renderCalendar();
   renderStats();
 });
-/*----------------------------END PROGRESS.HTML LOGIC----------------------------*/
 
 /*----------------------------HOME.HTML LOGIC (QUOTES)----------------------------*/
 const quotes = [
@@ -514,7 +506,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (quoteText) quoteText.textContent = `“${q.text}”`;
   if (quoteSub) quoteSub.textContent = q.sub;
 });
-/*----------------------------END HOME.HTML LOGIC (QUOTES)----------------------------*/
 
 /*----------------------------PROFILE.HTML LOGIC----------------------------*/
 document.addEventListener("DOMContentLoaded", () => {
@@ -612,7 +603,6 @@ document.addEventListener("DOMContentLoaded", () => {
     revealProfile();
   });
 });
-/*----------------------------END PROFILE.HTML LOGIC----------------------------*/
 
 /*----------------------------NAV AVATAR LOGIC----------------------------*/
 document.addEventListener("DOMContentLoaded", () => {
@@ -650,4 +640,3 @@ document.addEventListener("DOMContentLoaded", () => {
     renderNavAvatar(user);
   });
 });
-/*----------------------------END NAV AVATAR LOGIC----------------------------*/
