@@ -386,32 +386,30 @@ document.addEventListener("DOMContentLoaded", () => {
   let view = new Date();
   view.setDate(1);
 
-  function renderStats() {
-    const streakEl = document.getElementById("streakCount");
-    const longestEl = document.getElementById("longestStreak");
-    const streakMessage = document.getElementById("streakMessage");
+function renderStats() {
+  const streakEl = document.getElementById("streakCount");
+  const streakMessage = document.getElementById("streakMessage");
 
-    const { current, longest } = computeStreakStats();
-    
-    if (streakMessage) {
+  const { current, longest } = computeStreakStats();
+
+  if (streakMessage) {
     streakMessage.textContent =
-    current === 0
-      ? "Log a workout today to start your streak."
-      : current === 1
-      ? "You’ve worked out 1 day so far."
-      : `You’ve worked out ${current} days in a row.`;
-}
-
-    if (streakEl) streakEl.textContent = current;
-    if (longestEl) longestEl.textContent = longest;
-
-    const canvas = document.getElementById("streakChart");
-    if (canvas) {
-      const ctx = canvas.getContext("2d");
-      const { labels, values } = buildLastNDaysSeries(14);
-      drawLineChart(ctx, labels, values);
-    }
+      longest === 0
+        ? "Longest streak: 0 days"
+        : longest === 1
+        ? "Longest streak: 1 day"
+        : `Longest streak: ${longest} days`;
   }
+
+  if (streakEl) streakEl.textContent = current;
+
+  const canvas = document.getElementById("streakChart");
+  if (canvas) {
+    const ctx = canvas.getContext("2d");
+    const { labels, values } = buildLastNDaysSeries(14);
+    drawLineChart(ctx, labels, values);
+  }
+}
 
   function renderCalendar() {
     const log = loadLog();
