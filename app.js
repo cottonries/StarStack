@@ -186,6 +186,29 @@ function drawLineChart(ctx, labels, values) {
   ctx.stroke();
   ctx.restore();
 
+  // Y-axis ticks and numbers
+ctx.save();
+ctx.font = "11px Inter, system-ui, sans-serif";
+ctx.fillStyle = "rgba(92,102,122,0.9)";
+ctx.textAlign = "right";
+
+const steps = Math.min(maxY, 4); // limit tick count
+for (let i = 0; i <= steps; i++) {
+  const value = Math.round((i / steps) * maxY);
+  const yPos = y(value);
+
+  // tick line
+  ctx.strokeStyle = "rgba(0,0,0,0.06)";
+  ctx.beginPath();
+  ctx.moveTo(padLeft - 4, yPos);
+  ctx.lineTo(padLeft + plotW, yPos);
+  ctx.stroke();
+
+  // number
+  ctx.fillText(value, padLeft - 8, yPos + 4);
+}
+ctx.restore();
+
   // subtle fill under line
   if (points.length > 0) {
     const fillGradient = ctx.createLinearGradient(0, padTop, 0, padTop + plotH);
