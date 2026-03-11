@@ -154,7 +154,7 @@ function drawLineChart(ctx, labels, values) {
   const h = cssH;
   ctx.clearRect(0, 0, w, h);
 
-  const padLeft = 20;
+  const padLeft = 36;
   const padRight = 20;
   const padTop = 24;
   const padBottom = 34;
@@ -247,6 +247,7 @@ ctx.shadowBlur = 12;
   ctx.font = "12px Inter, system-ui, sans-serif";
   ctx.fillStyle = "rgba(92, 102, 122, 0.9)";
   ctx.textAlign = "center";
+  
 
   const step = Math.ceil(labels.length / 4);
   for (let i = 0; i < labels.length; i += step) {
@@ -256,8 +257,19 @@ ctx.shadowBlur = 12;
   if ((labels.length - 1) % step !== 0) {
     ctx.fillText(labels[labels.length - 1], x(labels.length - 1), h - 10);
   }
+  
 
   ctx.restore();
+  
+  // y-axis title
+ctx.save();
+ctx.translate(14, padTop + plotH / 2);
+ctx.rotate(-Math.PI / 2);
+ctx.font = "12px Inter, system-ui, sans-serif";
+ctx.fillStyle = "rgba(92, 102, 122, 0.9)";
+ctx.textAlign = "center";
+ctx.fillText("# Workouts", 0, 0);
+ctx.restore();
 }
 
 /*----------------------------WORKOUT.HTML LOGIC----------------------------*/
