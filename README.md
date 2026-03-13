@@ -6,14 +6,18 @@ StarStack is a cardio-focused fitness website designed to help users find workou
 
 The goal of the site is to make starting a workout easy by removing the need to search through multiple videos or platforms. Users can log in with their Google account, choose the type of workout they want, and track their progress over time.
 
-### How to Use StarStack
+---
+
+## How to Use StarStack
 1. Open the site and click **Start Now** to sign in using your Google account.
 2. After logging in, you will be redirected to the **Home page**.
 3. Navigate to the **Workout page** and select your workout **intensity** and **equipment type**.
 4. Click **Find Workout** to load a guided workout video.
-5. After completing a workout, click **Log Workout** to record it.
+5. After completing a workout, click **Log Workout** to the bottom right of the video player record it.
 6. Visit the **Progress page** to see your workout history and streak visualization.
-7. Click on your **profile icon** in the top right corner to view additional account information.
+7. Click on your **profile icon** in the top right corner to view additional account information or log out.
+
+---
 
 ### Key Features
 - **Google Authentication Login** – Secure login using a Google account through Firebase Authentication.
@@ -21,8 +25,10 @@ The goal of the site is to make starting a workout easy by removing the need to 
 - **Embedded Workout Videos** – Watch guided workout videos directly within the site.
 - **Workout Logging** – Record completed workouts to track progress.
 - **Progress Tracking** – Visualize workout history through a calendar and streak chart.
-- **User Profile Information** – Displays user details such as name, email, and account creation date.
+- **User Profile Information** – Displays user details such as name, email, and account creation date, as well as the ability to log out of the website.
 - **Responsive Interface** – Works across different screen sizes and browsers.
+  
+---
 
 ## Access the Site
 https://cottonries.github.io/StarStack/
@@ -64,7 +70,7 @@ npx playwright show-report
 
 ---
 
-## AI Assistance Disclosure
+### AI Assistance Disclosure
 
 ChatGPT (OpenAI) was used as a debugging and development assistant for:
 - JavaScript logic troubleshooting
