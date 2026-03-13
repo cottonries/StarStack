@@ -75,6 +75,8 @@ This application is designed with user privacy in mind. We do not store personal
 
 For security and operational purposes, Firebase Authentication records anonymous login activity, such as successful sign-ins and last login times, which are visible to administrators in the Firebase console. This helps us monitor the health and security of our authentication system.
 
+---
+
 ### AI Assistance Disclosure
 
 ChatGPT (OpenAI) was used as a debugging and development assistant for:
