@@ -1,0 +1,9 @@
+## Known Issues
+
+While the core functionality of StarStack is stable, a few minor issues and limitations are currently known:
+
+No known issues at this time.
+
+*Small issue noticed during our demo that will be fixed
+
+These issues do not affect the core ability to log in, select workouts, watch videos, or track workout progress.
