@@ -4,6 +4,8 @@
 
 StarStack is a cardio-focused fitness website designed to help users find workouts that fit their individual needs. The site will use user-based interaction to select workout criteria such as intensity level and workout type. Based on these selections, StarStack will display an embedded YouTube video that matches the chosen criteria, allowing users to quickly access guided cardio workouts without needing to search manually.
 
+The goal of the site is to make starting a workout easy by removing the need to search through multiple videos or platforms. Users can log in with their Google account, choose the type of workout they want, and track their progress over time.
+
 ### How to Use StarStack
 1. Open the site and click **Start Now** to sign in using your Google account.
 2. After logging in, you will be redirected to the **Home page**.
