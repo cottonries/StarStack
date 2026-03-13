@@ -7,8 +7,9 @@ StarStack is a cardio-focused fitness website designed to help users find workou
 ## Live Demo
 https://cottonries.github.io/StarStack/
 
-Finding and Logging Workouts
-<video src="main/StarStack/SR_Workout (1).mp4" controls width="600"></video>
+<video width="700" controls>
+  <source src="SR_Workout(1).mp4" type="video/mp4">
+</video>
 
 ---
 
