@@ -1,33 +1,70 @@
-Testing Summary
+================================================
+~*~ TESTING SUMMARY ~*~
+================================================
 
 Our team performed several types of testing to verify that the core functionality of StarStack works reliably across the main user workflows.
 
-Manual End-to-End Testing
-Most Recent Test Run: date
+================================================
+MANUAL END-TO-END TESTING
+Most Recent Test Run: 3/13/26 
+*More information can be found in the TestResults/SupportingDocuments.md
+================================================
 
-We manually tested the complete user experience by running through the main application flow multiple times. This included logging in with Google authentication, selecting a workout based on intensity and equipment, watching the embedded workout video, logging the workout, and verifying that the Progress page correctly recorded the activity.
-Result: All core workflows functioned as expected, and workouts were successfully logged and displayed in the calendar interface and streak chart.
+We manually tested the complete user experience by running through the main application flow multiple times. This included:
+- Logging in with Google authentication via FireBase
+- Selecting a workout based on intensity and equipment
+- Watching the embedded workout video
+- Logging the workout
+- Verifying that the Progress page recorded the activity
 
-Cross-Browser and Device Testing
-Most Recent Test Run: date
+RESULT:
+All core workflows functioned as expected, and workouts were successfully logged and displayed in the calendar interface and streak chart.
+
+================================================
+CROSS-BROWSER AND DEVICE TESTING
+Most Recent Test Run: 3/13/26
+================================================
 
 We tested the application on multiple browsers and screen sizes to ensure the interface behaved consistently across different environments. This included confirming that users could log in through Firebase, watch embedded workout videos, and log workouts without errors.
-Result: Core features remained stable across tested browsers and screen sizes, with only minor layout adjustments needed for smaller displays.
 
-Bug Bash Testing (In-Class)
+RESULT: 
+Core features remained stable across tested browsers and screen sizes, with only minor layout adjustments needed for smaller displays.
+
+================================================
+BUG BASH TESTING (IN-CLASS)
 Most Recent Test Run: 3/4/2026
+*More information can be found in the TestResults/SupportingDocuments.md
+================================================
 
-During an in-class bug bash event, other students tested the StarStack website and attempted to identify usability issues, bugs, or unexpected behavior. This provided additional real-user testing and feedback from individuals who were not part of the development team. Any issues discovered during the event were recorded and tracked using our bug tracking spreadsheet and project management tools.
-Result: Several minor bugs and usability issues were identified and fixed, which helped improve the overall stability and user experience of the application.
+During an in-class bug bash event, other students tested the StarStack website and attempted to identify usability issues, bugs, or unexpected behavior. This provided additional real-user testing and feedback from individuals who were not part of the development team. 
 
-Automated End-to-End Testing (Playwright)
-Most Recent Test Run: date (probably today and ongoing since it's constantly testing)
+Any issues discovered during the event were recorded and tracked using our bug tracking spreadsheet and project management tools.
+
+RESULT:
+Several minor bugs and usability issues were identified and fixed, which helped improve the overall stability and user experience of the application.
+
+================================================
+AUTOMATED END-TO-END TESTING (PLAYWRIGHT)
+Most Recent Test Run: Ongoing 
+*More information can be found in the TestResults/SupportingDocuments.md
+================================================
 
 We implemented three Playwright automated tests that simulate real user interactions with the application. These tests verify that key workflows such as opening the workout page, selecting workout options, loading a workout video, logging a workout, and viewing progress tracking elements function correctly.
-Result: Automated tests confirmed that the primary workflows of the application operate correctly.
 
-Authentication Testing
-Most Recent Test Run: date
+RESULT: 
+Automated tests confirmed that the primary workflows of the application operate correctly.
+
+WORKFLOW:
+https://github.com/cottonries/StarStack/actions/workflows/playwright.yml
+
+STATUS BADGE:
+https://github.com/cottonries/StarStack/actions/workflows/playwright.yml/badge.svg
+
+================================================
+AUTHENTICATION TESTING
+Most Recent Test Run: 3/13/26
+*More information can be found in the TestResults/SupportingDocuments.md
+================================================
 
 Because Firebase authentication requires external login confirmation, automated testing of the login process was limited. Instead, login functionality was tested manually to ensure users could successfully authenticate and be redirected from the landing page to the home page.
 Result: Login and session handling worked consistently across manual test runs.
