@@ -13,6 +13,7 @@ The goal of the site is to make starting a workout easy by removing the need to 
 4. Click **Find Workout** to load a guided workout video.
 5. After completing a workout, click **Log Workout** to record it.
 6. Visit the **Progress page** to see your workout history and streak visualization.
+7. Click on your **profile icon** in the top right corner to view additional account information.
 
 ### Key Features
 - **Google Authentication Login** – Secure login using a Google account through Firebase Authentication.
