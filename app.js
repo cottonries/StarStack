@@ -6,6 +6,9 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
+// Import getAnalytics
+import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyAyHQEc2TKcxERFu_-POYGp6fR_qTyBQK4",
   authDomain: "starstack-7951e.firebaseapp.com",
@@ -17,6 +20,9 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
+
+//Initialize Firebase Analytics
+const analytics = getAnalytics(firebaseApp);
 
 /*----------------------------HOME.HTML AUTH LOGIC----------------------------*/
 document.addEventListener("DOMContentLoaded", () => {
@@ -31,6 +37,12 @@ document.addEventListener("DOMContentLoaded", () => {
         : "User";
 
       mainWelcome.textContent = `Welcome to StarStack ${firstName}`;
+
+      // Log the 'login' event here when a user is authenticated
+      logEvent(analytics, 'login', {
+        user_id: user.uid, // Optionally log the user ID (hashed or anonymous if privacy is a concern)
+        method: user.providerData[0]?.providerId || 'unknown' // Get provider ID (e.g., "google.com", "password")
+      });
     } else {
       window.location.href = "index.html";
     }
@@ -75,6 +87,11 @@ function logWorkout(intensity, equipment) {
   });
 
   saveLog(log);
+  //log a custom event for "workout_logged" here 
+  logEvent(analytics, 'workout_logged', {
+    intensity: intensity,
+    equipment: equipment
+  });
 }
 
 function computeStreakStats() {
