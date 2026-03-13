@@ -1,4 +1,5 @@
-![Playwright Tests](https://github.com/cottonries/StarStack/actions/workflows/playwright.yml/badge.svg) 
+[![Playwright Tests](https://github.com/cottonries/StarStack/actions/workflows/playwright.yml/badge.svg)](https://github.com/cottonries/StarStack/actions/workflows/playwright.yml)
+
 
 # StarStack
 
