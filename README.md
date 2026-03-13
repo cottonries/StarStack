@@ -12,7 +12,16 @@ StarStack is a cardio-focused fitness website designed to help users find workou
 5. After completing a workout, click **Log Workout** to record it.
 6. Visit the **Progress page** to see your workout history and streak visualization.
 
-## Live Demo
+### Key Features
+- **Google Authentication Login** – Secure login using a Google account through Firebase Authentication.
+- **Workout Selection System** – Choose workouts based on intensity level and available equipment.
+- **Embedded Workout Videos** – Watch guided workout videos directly within the site.
+- **Workout Logging** – Record completed workouts to track progress.
+- **Progress Tracking** – Visualize workout history through a calendar and streak chart.
+- **User Profile Information** – Displays user details such as name, email, and account creation date.
+- **Responsive Interface** – Works across different screen sizes and browsers.
+
+## Access the Site
 https://cottonries.github.io/StarStack/
 
 ---
