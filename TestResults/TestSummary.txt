@@ -66,5 +66,7 @@ Most Recent Test Run: 3/13/26
 *More information can be found in the TestResults/SupportingDocuments.md
 ================================================
 
-Because Firebase authentication requires external login confirmation, automated testing of the login process was limited. Instead, login functionality was tested manually to ensure users could successfully authenticate and be redirected from the landing page to the home page.
-Result: Login and session handling worked consistently across manual test runs.
+Because Firebase authentication requires external login confirmation, automated testing of the login process was limited. Instead, login functionality was mainly tested manually to ensure users could successfully authenticate and be redirected from the landing page to the home page.
+
+RESULT:
+Login and session handling worked consistently across manual test runs.
