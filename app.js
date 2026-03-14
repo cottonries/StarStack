@@ -1,4 +1,4 @@
-/*----------------------------FIREBASE LOGIC----------------------------*/
+/*---------------------------- FIREBASE LOGIC ----------------------------*/
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import {
   getAuth,
@@ -23,7 +23,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 const analytics = getAnalytics(firebaseApp);
 
-/*----------------------------SHARED HELPERS----------------------------*/
+/*---------------------------- SHARED HELPERS ----------------------------*/
 const STORAGE_KEY = "starstack_workout_log_v1";
 let lastChartKey = "";
 
@@ -39,13 +39,19 @@ function loadLog() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     return raw ? JSON.parse(raw) : {};
-  } catch {
+  } catch (error) {
+    console.error("Failed to load workout log:", error);
     return {};
   }
 }
 
 function saveLog(log) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(log));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(log));
+  } catch (error) {
+    console.error("Failed to save workout log:", error);
+    throw new Error("Unable to save workout data.");
+  }
 }
 
 function getWorkoutArray(entry) {
@@ -80,7 +86,43 @@ function formatMemberSince(dateValue) {
   }).format(date);
 }
 
-/*----------------------------HOME.HTML AUTH LOGIC----------------------------*/
+function safeLogEvent(eventName, params = {}) {
+  try {
+    logEvent(analytics, eventName, params);
+  } catch (error) {
+    console.warn(`Analytics event failed: ${eventName}`, error);
+  }
+}
+
+function setMessage(el, text, state = "info") {
+  if (!el) return;
+  el.textContent = text;
+  el.dataset.state = state;
+}
+
+function setButtonLoading(button, isLoading, loadingText = "Loading...") {
+  if (!button) return;
+
+  if (isLoading) {
+    if (!button.dataset.originalText) {
+      button.dataset.originalText = button.textContent;
+    }
+    button.disabled = true;
+    button.textContent = loadingText;
+    button.setAttribute("aria-busy", "true");
+  } else {
+    button.disabled = false;
+    button.textContent = button.dataset.originalText || button.textContent;
+    button.removeAttribute("aria-busy");
+  }
+}
+
+function setFieldError(field, hasError) {
+  if (!field) return;
+  field.classList.toggle("input-error", hasError);
+}
+
+/*---------------------------- HOME.HTML AUTH LOGIC ----------------------------*/
 document.addEventListener("DOMContentLoaded", () => {
   const mainWelcome = document.getElementById("main-welcome");
   if (!mainWelcome) return;
@@ -97,15 +139,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     mainWelcome.textContent = `Welcome to StarStack ${firstName}`;
 
-    logEvent(analytics, "login", {
+    safeLogEvent("login", {
       user_id: user.uid,
       method: user.providerData[0]?.providerId || "unknown"
     });
   });
 });
 
-/*----------------------------WORKOUT LOGGING (SHARED BY WORKOUT.HTML AND PROGRESS.HTML)----------------------------*/
+/*---------------------------- WORKOUT LOGGING ----------------------------*/
 function logWorkout(intensity, equipment) {
+  if (!intensity || !equipment) {
+    throw new Error("Workout intensity and equipment are required.");
+  }
+
   const todayISO = toISODate(new Date());
   const log = loadLog();
 
@@ -121,12 +167,11 @@ function logWorkout(intensity, equipment) {
 
   saveLog(log);
 
-  logEvent(analytics, "workout_logged", {
+  safeLogEvent("workout_logged", {
     intensity,
     equipment
   });
 
-  // force chart redraw next time stats are rendered
   lastChartKey = "";
 }
 
@@ -229,7 +274,6 @@ function drawLineChart(ctx, labels, values) {
     y: y(v)
   }));
 
-  // baseline
   ctx.save();
   ctx.strokeStyle = "rgba(194,147,230,0.25)";
   ctx.lineWidth = 2;
@@ -239,7 +283,6 @@ function drawLineChart(ctx, labels, values) {
   ctx.stroke();
   ctx.restore();
 
-  // y-axis ticks and grid lines
   ctx.save();
   ctx.font = "11px Inter, system-ui, sans-serif";
   ctx.fillStyle = "rgba(92,102,122,0.9)";
@@ -262,7 +305,6 @@ function drawLineChart(ctx, labels, values) {
 
   ctx.restore();
 
-  // fill under line
   if (points.length > 0) {
     const fillGradient = ctx.createLinearGradient(0, padTop, 0, padTop + plotH);
     fillGradient.addColorStop(0, "rgba(194,147,230,0.18)");
@@ -283,7 +325,6 @@ function drawLineChart(ctx, labels, values) {
     ctx.restore();
   }
 
-  // line
   ctx.save();
   ctx.strokeStyle = "rgb(194,147,230)";
   ctx.lineWidth = 5;
@@ -300,7 +341,6 @@ function drawLineChart(ctx, labels, values) {
   ctx.stroke();
   ctx.restore();
 
-  // dots
   points.forEach((p) => {
     ctx.save();
     ctx.fillStyle = "rgb(194,147,230)";
@@ -317,7 +357,6 @@ function drawLineChart(ctx, labels, values) {
     ctx.restore();
   });
 
-  // x-axis labels
   ctx.save();
   ctx.font = "12px Inter, system-ui, sans-serif";
   ctx.fillStyle = "rgba(92, 102, 122, 0.9)";
@@ -334,7 +373,6 @@ function drawLineChart(ctx, labels, values) {
 
   ctx.restore();
 
-  // y-axis title
   ctx.save();
   ctx.translate(14, padTop + plotH / 2);
   ctx.rotate(-Math.PI / 2);
@@ -345,7 +383,7 @@ function drawLineChart(ctx, labels, values) {
   ctx.restore();
 }
 
-/*----------------------------WORKOUT.HTML LOGIC----------------------------*/
+/*---------------------------- WORKOUT.HTML LOGIC ----------------------------*/
 document.addEventListener("DOMContentLoaded", () => {
   const intensityEl = document.getElementById("intensity");
   const equipmentEl = document.getElementById("equipment");
@@ -353,6 +391,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const logWorkoutBtn = document.getElementById("logWorkoutBtn");
   const player = document.getElementById("player");
   const msg = document.getElementById("msg");
+  const playerWrap = document.querySelector(".player-wrap");
 
   const PLAYLISTS = {
     easy: {
@@ -379,60 +418,127 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentWorkout = null;
 
+  function resetWorkoutState() {
+    currentWorkout = null;
+    if (logWorkoutBtn) {
+      logWorkoutBtn.disabled = true;
+    }
+  }
+
+  function clearFieldErrors() {
+    setFieldError(intensityEl, false);
+    setFieldError(equipmentEl, false);
+  }
+
+  resetWorkoutState();
+  setMessage(msg, "Choose an intensity and equipment to start.", "info");
+
   findBtn.addEventListener("click", () => {
-    const intensity = intensityEl?.value;
-    const equipment = equipmentEl?.value;
+    const intensity = intensityEl?.value?.trim();
+    const equipment = equipmentEl?.value?.trim();
+
+    clearFieldErrors();
 
     if (!intensity || !equipment) {
-      msg.textContent = "Please select both intensity and equipment.";
+      if (!intensity) setFieldError(intensityEl, true);
+      if (!equipment) setFieldError(equipmentEl, true);
+
+      setMessage(msg, "Please select both intensity and equipment.", "error");
       player.src = "";
-      currentWorkout = null;
+      resetWorkoutState();
       return;
     }
 
     const playlistId = PLAYLISTS[intensity]?.[equipment];
     if (!playlistId) {
-      msg.textContent = "No playlist found.";
+      setMessage(msg, "No playlist found for that combination.", "error");
       player.src = "";
-      currentWorkout = null;
+      resetWorkoutState();
       return;
     }
 
-    player.src = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&rel=0`;
-    msg.textContent = `Playing: ${intensity.toLowerCase()} + ${equipment.replace("_", " ").toLowerCase()}`;
-    currentWorkout = { intensity, equipment };
+    try {
+      setButtonLoading(findBtn, true, "Loading...");
+      playerWrap?.classList.add("is-loading");
+
+      player.src = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&rel=0`;
+      currentWorkout = { intensity, equipment };
+
+      if (logWorkoutBtn) {
+        logWorkoutBtn.disabled = false;
+      }
+
+      setMessage(
+        msg,
+        `Playing: ${intensity.toLowerCase()} + ${equipment.replace("_", " ").toLowerCase()}`,
+        "success"
+      );
+
+      safeLogEvent("workout_selected", { intensity, equipment });
+    } catch (error) {
+      console.error("Workout load error:", error);
+      player.src = "";
+      resetWorkoutState();
+      setMessage(msg, "Something went wrong while loading the workout.", "error");
+    } finally {
+      setTimeout(() => {
+        playerWrap?.classList.remove("is-loading");
+        setButtonLoading(findBtn, false);
+      }, 500);
+    }
   });
 
   if (logWorkoutBtn) {
     logWorkoutBtn.addEventListener("click", () => {
       if (!currentWorkout) {
-        msg.textContent = "Find a workout first, then log it.";
+        setMessage(msg, "Find a workout first, then log it.", "error");
         return;
       }
 
-      logWorkout(currentWorkout.intensity, currentWorkout.equipment);
-      msg.textContent = `Workout logged: ${currentWorkout.intensity.toLowerCase()} + ${currentWorkout.equipment.replace("_", " ").toLowerCase()}`;
+      try {
+        setButtonLoading(logWorkoutBtn, true, "Logging...");
+        logWorkout(currentWorkout.intensity, currentWorkout.equipment);
+
+        setMessage(
+          msg,
+          `Workout logged: ${currentWorkout.intensity.toLowerCase()} + ${currentWorkout.equipment.replace("_", " ").toLowerCase()}`,
+          "success"
+        );
+      } catch (error) {
+        console.error("Workout logging error:", error);
+        setMessage(msg, "We could not save your workout. Please try again.", "error");
+      } finally {
+        setButtonLoading(logWorkoutBtn, false);
+      }
     });
   }
 });
 
-/*----------------------------PROGRESS.HTML LOGIC----------------------------*/
+/*---------------------------- PROGRESS.HTML LOGIC ----------------------------*/
 document.addEventListener("DOMContentLoaded", () => {
   const calGrid = document.getElementById("calGrid");
   const calTitle = document.getElementById("calTitle");
   const calDetail = document.getElementById("calDetail");
-
   const calPrev = document.getElementById("calPrev");
   const calNext = document.getElementById("calNext");
   const calToday = document.getElementById("calToday");
 
   if (!calGrid || !calTitle || !calDetail) return;
 
-  function monthName(m) {
+  function monthName(monthIndex) {
     return [
       "January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
-    ][m];
+    ][monthIndex];
+  }
+
+  function renderEmptyDetail(title, text) {
+    calDetail.innerHTML = `
+      <div class="empty-state">
+        <strong>${title}</strong>
+        ${text}
+      </div>
+    `;
   }
 
   let view = new Date();
@@ -443,15 +549,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const streakMessage = document.getElementById("streakMessage");
     const canvas = document.getElementById("streakChart");
 
+    const log = loadLog();
+    const hasAnyWorkouts = Object.keys(log).length > 0;
     const { current, longest } = computeStreakStats();
 
     if (streakMessage) {
-      streakMessage.textContent =
-        longest === 0
-          ? "Longest streak: 0 days"
-          : longest === 1
-          ? "Longest streak: 1 day"
-          : `Longest streak: ${longest} days`;
+      if (!hasAnyWorkouts) {
+        streakMessage.textContent = "No workouts logged yet. Complete your first workout to start a streak.";
+      } else {
+        streakMessage.textContent =
+          longest === 1
+            ? "Longest streak: 1 day"
+            : `Longest streak: ${longest} days`;
+      }
     }
 
     if (streakEl) {
@@ -463,7 +573,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const { labels, values } = buildLastNDaysSeries(14);
     const chartKey = JSON.stringify({ labels, values });
 
-    // Fix: avoid unnecessary canvas redraws when data has not changed
     if (chartKey === lastChartKey) return;
 
     lastChartKey = chartKey;
@@ -481,10 +590,10 @@ document.addEventListener("DOMContentLoaded", () => {
     calGrid.innerHTML = "";
 
     const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    for (const w of weekdays) {
+    for (const weekday of weekdays) {
       const el = document.createElement("div");
       el.className = "cal-weekday";
-      el.textContent = w;
+      el.textContent = weekday;
       calGrid.appendChild(el);
     }
 
@@ -527,7 +636,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       btn.addEventListener("click", () => {
         if (workouts.length === 0) {
-          calDetail.innerHTML = `<p class="feature-text" style="margin:0;"><strong>${iso}</strong>: No workout logged.</p>`;
+          renderEmptyDetail(iso, "No workout logged for this day yet.");
           return;
         }
 
@@ -562,9 +671,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const entry = loadLog()[iso];
     const workouts = getWorkoutArray(entry);
 
-    calDetail.innerHTML = workouts.length > 0
-      ? `<p class="feature-text" style="margin:0;"><strong>${iso}</strong><br>${workouts.map(formatWorkoutText).join("<br>")}</p>`
-      : `<p class="feature-text" style="margin:0;"><strong>${iso}</strong>: No workout logged.</p>`;
+    if (workouts.length > 0) {
+      calDetail.innerHTML = `
+        <p class="feature-text" style="margin:0;">
+          <strong>${iso}</strong><br>
+          ${workouts.map(formatWorkoutText).join("<br>")}
+        </p>
+      `;
+    } else {
+      renderEmptyDetail(iso, "No workout logged for this day yet.");
+    }
   });
 
   let resizeTimer = null;
@@ -576,11 +692,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 150);
   });
 
+  renderEmptyDetail("No day selected", "Choose a calendar day to view workout details.");
   renderCalendar();
   renderStats();
 });
 
-/*----------------------------HOME.HTML LOGIC (QUOTES)----------------------------*/
+/*---------------------------- HOME.HTML LOGIC (QUOTES) ----------------------------*/
 const quotes = [
   { text: "You just can’t beat the person who never gives up.", sub: "— Babe Ruth" },
   { text: "You’ve survived 100 percent of your worst days.", sub: "— Robin Arzon" },
@@ -598,7 +715,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (quoteSub) quoteSub.textContent = q.sub;
 });
 
-/*----------------------------PROFILE.HTML LOGIC----------------------------*/
+/*---------------------------- PROFILE.HTML LOGIC ----------------------------*/
 document.addEventListener("DOMContentLoaded", () => {
   const profileMain = document.getElementById("profile-main");
   if (!profileMain) return;
@@ -634,10 +751,18 @@ document.addEventListener("DOMContentLoaded", () => {
   if (logoutButton) {
     logoutButton.addEventListener("click", async () => {
       try {
+        setButtonLoading(logoutButton, true, "Signing out...");
         await signOut(auth);
         window.location.href = "index.html";
       } catch (error) {
         console.error("Logout error:", error);
+        if (profileStatus) {
+          profileStatus.hidden = false;
+          profileStatus.dataset.state = "error";
+          profileStatus.textContent = "We couldn’t sign you out right now. Please try again.";
+        }
+      } finally {
+        setButtonLoading(logoutButton, false);
       }
     });
   }
@@ -656,10 +781,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (profileDisplayName) profileDisplayName.textContent = displayName;
     if (profileName) profileName.textContent = displayName;
     if (profileEmail) profileEmail.textContent = email;
+
     if (profileEmailShort) {
       profileEmailShort.textContent =
         email.length > 14 ? `${email.slice(0, 14)}...` : email;
     }
+
     if (profileMemberSince) {
       profileMemberSince.textContent = formatMemberSince(user.metadata.creationTime);
     }
@@ -669,7 +796,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-/*----------------------------NAV AVATAR LOGIC----------------------------*/
+/*---------------------------- NAV AVATAR LOGIC ----------------------------*/
 document.addEventListener("DOMContentLoaded", () => {
   const navAvatarImage = document.getElementById("nav-avatar-image");
   const navAvatarFallback = document.getElementById("nav-avatar-fallback");
