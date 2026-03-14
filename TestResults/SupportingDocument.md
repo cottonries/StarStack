@@ -6,6 +6,10 @@
 
 ### Playwright Testing
 
+*Continously Running* 
+
+Last formal run done: 3/13/26
+
 ![Playwright Tests](https://github.com/cottonries/StarStack/actions/workflows/playwright.yml/badge.svg) 
 
 <img width="641" height="241" alt="Screenshot 2026-03-13 at 1 04 35 PM" src="https://github.com/user-attachments/assets/dcc055b2-e17b-4133-80f2-276c6793d50c" />
@@ -14,26 +18,24 @@
 
 ### Google Chrome Developer Tools (Lighthouse Audit)
 
+*(In a new incognito window) inspect > Lighthouse > Navigation/Desktop/Performance+Accessibility+Best Practices+SEO > Analyze page load*
+
+Last formal run done: 3/13/26
+
 ### index.html
-
-
+<img width="1436" height="214" alt="Image" src="https://github.com/user-attachments/assets/9e5c8811-ff34-4800-ba0f-a85ea98f1e9a" />
 
 ### home.html
-
-
+<img width="1440" height="215" alt="Image" src="https://github.com/user-attachments/assets/c677709a-b0d7-4c99-9dda-b4e7f47f7c42" />
 
 ### workout.html
-
-
+<img width="1439" height="215" alt="Image" src="https://github.com/user-attachments/assets/ff39217b-8c0c-40d7-bab2-81acbde38f86" />
 
 ### progress.html
-
-
+<img width="1440" height="244" alt="Image" src="https://github.com/user-attachments/assets/2338f2bd-8723-412c-9883-9de69ddc521b" />
 
 ### profile.html
-
-
-
+<img width="1440" height="240" alt="Image" src="https://github.com/user-attachments/assets/e6d37d2c-34a4-4ebe-bfa3-b97f16f6f937" /> 
 
 ---
 
