@@ -20,7 +20,7 @@ The goal of the site is to make starting a workout easy by removing the need to 
 
 ---
 
-### Key Features
+## Key Features
 - **Google Authentication Login** – Secure login using a Google account through Firebase Authentication.
 - **Workout Selection System** – Choose workouts based on intensity level and available equipment.
 - **Embedded Workout Videos** – Watch guided workout videos directly within the site.
@@ -70,7 +70,29 @@ npx playwright show-report
 ```
 
 ---
-### User Data Storage
+
+## Tech Stack
+
+### Frontend
+- **HTML5** – Page structure (`index.html`, `home.html`, `workout.html`, `progress.html`, `profile.html`)
+- **CSS3** – Styling and layout (`style.css`)
+- **JavaScript (ES Modules)** – Client-side application logic (`app.js`)
+
+### Libraries
+- **Chart.js** – JavaScript library used to generate the workout progress line chart.
+
+### Backend / Cloud Services
+- **Firebase Authentication** – Handles Google sign-in and user session management.
+
+### Data Storage
+- **Browser LocalStorage** – Stores user workout logs locally in the browser.
+
+### External Integrations
+- **YouTube Embed** – Displays workout videos directly within the workout page.
+
+---
+
+## User Data Storage
 
 This application is designed with user privacy in mind. We do not store personal user data on our servers. All application-specific data is stored directly in your browser's local storage. This means your data remains entirely on your device and is not transmitted to us. Please note that if you clear your browser's data, this information will be removed.
 
