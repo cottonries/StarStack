@@ -285,9 +285,9 @@ canvas {
 }
 
 /*------------------ FEATURES ------------------*/
-.features {
+.features{
+  border-top: none;
   padding: 50px 0;
-  border-top: 1px solid var(--border);
 }
 
 .features-inner {
