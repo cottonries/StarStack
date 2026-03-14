@@ -25,6 +25,7 @@ const analytics = getAnalytics(firebaseApp);
 
 /*---------------------------- SHARED HELPERS ----------------------------*/
 const STORAGE_KEY = "starstack_workout_log_v1";
+const WORKOUT_LOG_COOLDOWN_MS = 2 * 60 * 1000; // 2 minutes
 let lastChartKey = "";
 
 function pad2(n) {
@@ -33,6 +34,46 @@ function pad2(n) {
 
 function toISODate(d) {
   return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+}
+
+function canLogWorkoutNow() {
+  const log = loadLog();
+  const todayISO = toISODate(new Date());
+  const workoutsToday = getWorkoutArray(log[todayISO]);
+
+  if (workoutsToday.length === 0) {
+    return { allowed: true, remainingMs: 0 };
+  }
+
+  const lastWorkout = workoutsToday[workoutsToday.length - 1];
+  const lastTs = Number(lastWorkout?.ts || 0);
+  const now = Date.now();
+  const elapsed = now - lastTs;
+
+  if (elapsed >= WORKOUT_LOG_COOLDOWN_MS) {
+    return { allowed: true, remainingMs: 0 };
+  }
+
+  return {
+    allowed: false,
+    remainingMs: WORKOUT_LOG_COOLDOWN_MS - elapsed
+  };
+}
+
+function formatRemainingTime(ms) {
+  const totalSeconds = Math.ceil(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  if (minutes <= 0) {
+    return `${seconds} second${seconds === 1 ? "" : "s"}`;
+  }
+
+  if (seconds === 0) {
+    return `${minutes} minute${minutes === 1 ? "" : "s"}`;
+  }
+
+  return `${minutes} minute${minutes === 1 ? "" : "s"} ${seconds} second${seconds === 1 ? "" : "s"}`;
 }
 
 function loadLog() {
@@ -488,30 +529,40 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  if (logWorkoutBtn) {
-    logWorkoutBtn.addEventListener("click", () => {
-      if (!currentWorkout) {
-        setMessage(msg, "Find a workout first, then log it.", "error");
-        return;
-      }
+if (logWorkoutBtn) {
+  logWorkoutBtn.addEventListener("click", () => {
+    if (!currentWorkout) {
+      setMessage(msg, "Find a workout first, then log it.", "error");
+      return;
+    }
 
-      try {
-        setButtonLoading(logWorkoutBtn, true, "Logging...");
-        logWorkout(currentWorkout.intensity, currentWorkout.equipment);
+    const cooldown = canLogWorkoutNow();
+    if (!cooldown.allowed) {
+      setMessage(
+        msg,
+        `Please wait ${formatRemainingTime(cooldown.remainingMs)} before logging another workout.`,
+        "warning"
+      );
+      return;
+    }
 
-        setMessage(
-          msg,
-          `Workout logged: ${currentWorkout.intensity.toLowerCase()} + ${currentWorkout.equipment.replace("_", " ").toLowerCase()}`,
-          "success"
-        );
-      } catch (error) {
-        console.error("Workout logging error:", error);
-        setMessage(msg, "We could not save your workout. Please try again.", "error");
-      } finally {
-        setButtonLoading(logWorkoutBtn, false);
-      }
-    });
-  }
+    try {
+      setButtonLoading(logWorkoutBtn, true, "Logging...");
+      logWorkout(currentWorkout.intensity, currentWorkout.equipment);
+
+      setMessage(
+        msg,
+        `Workout logged: ${currentWorkout.intensity.toLowerCase()} + ${currentWorkout.equipment.replace("_", " ").toLowerCase()}`,
+        "success"
+      );
+    } catch (error) {
+      console.error("Workout logging error:", error);
+      setMessage(msg, "We could not save your workout. Please try again.", "error");
+    } finally {
+      setButtonLoading(logWorkoutBtn, false);
+    }
+  });
+}
 });
 
 /*---------------------------- PROGRESS.HTML LOGIC ----------------------------*/
