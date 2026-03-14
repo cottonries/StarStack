@@ -5,9 +5,10 @@ import {
   onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-
-// Import getAnalytics
-import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
+import {
+  getAnalytics,
+  logEvent
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAyHQEc2TKcxERFu_-POYGp6fR_qTyBQK4",
@@ -20,40 +21,16 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
-
-//Initialize Firebase Analytics
 const analytics = getAnalytics(firebaseApp);
 
-/*----------------------------HOME.HTML AUTH LOGIC----------------------------*/
-document.addEventListener("DOMContentLoaded", () => {
-  const mainWelcome = document.getElementById("main-welcome");
-
-  if (!mainWelcome) return;
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const firstName = user.displayName
-        ? user.displayName.split(" ")[0]
-        : "User";
-
-      mainWelcome.textContent = `Welcome to StarStack ${firstName}`;
-
-      // Log the 'login' event here when a user is authenticated
-      logEvent(analytics, 'login', {
-        user_id: user.uid, // Optionally log the user ID (hashed or anonymous if privacy is a concern)
-        method: user.providerData[0]?.providerId || 'unknown' // Get provider ID (e.g., "google.com", "password")
-      });
-    } else {
-      window.location.href = "index.html";
-    }
-  });
-});
-
-/*----------------------------WORKOUT LOGGING (SHARED BY WORKOUT.HTML AND PROGRESS.HTML)----------------------------*/
-
+/*----------------------------SHARED HELPERS----------------------------*/
 const STORAGE_KEY = "starstack_workout_log_v1";
+let lastChartKey = "";
 
-function pad2(n) { return String(n).padStart(2, "0"); }
+function pad2(n) {
+  return String(n).padStart(2, "0");
+}
+
 function toISODate(d) {
   return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
 }
@@ -71,7 +48,63 @@ function saveLog(log) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(log));
 }
 
-// Called when user clicks "Log Workout"
+function getWorkoutArray(entry) {
+  return Array.isArray(entry) ? entry : entry ? [entry] : [];
+}
+
+function formatWorkoutText(workout) {
+  return `${workout.intensity.toUpperCase()} + ${workout.equipment.replace("_", " ").toUpperCase()}`;
+}
+
+function getInitials(displayName, email) {
+  const source = displayName?.trim() || email?.split("@")[0] || "User";
+  const parts = source.split(/\s+/).filter(Boolean);
+
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+
+  return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+}
+
+function formatMemberSince(dateValue) {
+  if (!dateValue) return "-";
+
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return "-";
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  }).format(date);
+}
+
+/*----------------------------HOME.HTML AUTH LOGIC----------------------------*/
+document.addEventListener("DOMContentLoaded", () => {
+  const mainWelcome = document.getElementById("main-welcome");
+  if (!mainWelcome) return;
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "index.html";
+      return;
+    }
+
+    const firstName = user.displayName
+      ? user.displayName.split(" ")[0]
+      : "User";
+
+    mainWelcome.textContent = `Welcome to StarStack ${firstName}`;
+
+    logEvent(analytics, "login", {
+      user_id: user.uid,
+      method: user.providerData[0]?.providerId || "unknown"
+    });
+  });
+});
+
+/*----------------------------WORKOUT LOGGING (SHARED BY WORKOUT.HTML AND PROGRESS.HTML)----------------------------*/
 function logWorkout(intensity, equipment) {
   const todayISO = toISODate(new Date());
   const log = loadLog();
@@ -87,41 +120,43 @@ function logWorkout(intensity, equipment) {
   });
 
   saveLog(log);
-  //log a custom event for "workout_logged" here 
-  logEvent(analytics, 'workout_logged', {
-    intensity: intensity,
-    equipment: equipment
+
+  logEvent(analytics, "workout_logged", {
+    intensity,
+    equipment
   });
+
+  // force chart redraw next time stats are rendered
+  lastChartKey = "";
 }
 
 function computeStreakStats() {
   const log = loadLog();
-  const dates = Object.keys(log).sort(); // ISO sort works
+  const dates = Object.keys(log).sort();
 
-  if (dates.length === 0) return { current: 0, longest: 0 };
+  if (dates.length === 0) {
+    return { current: 0, longest: 0 };
+  }
 
-  // Longest streak (all-time)
   let longest = 1;
   let run = 1;
 
   for (let i = 1; i < dates.length; i++) {
-    const prev = new Date(dates[i - 1] + "T00:00:00");
-    const curr = new Date(dates[i] + "T00:00:00");
+    const prev = new Date(`${dates[i - 1]}T00:00:00`);
+    const curr = new Date(`${dates[i]}T00:00:00`);
     const diffDays = Math.round((curr - prev) / (1000 * 60 * 60 * 24));
 
     if (diffDays === 1) {
       run += 1;
       longest = Math.max(longest, run);
-    } else if (diffDays === 0) {
-      continue; // duplicate same-day entry (unlikely but safe)
-    } else {
+    } else if (diffDays !== 0) {
       run = 1;
     }
   }
 
-  // Current streak (from today backwards)
   let current = 0;
   const d = new Date();
+
   while (true) {
     const iso = toISODate(d);
     if (log[iso]) {
@@ -147,10 +182,11 @@ function buildLastNDaysSeries(n = 14) {
     d.setDate(today.getDate() - i);
 
     const iso = toISODate(d);
-    labels.push(`${d.getMonth() + 1}/${d.getDate()}`); // M/D
     const entry = log[iso];
-const workouts = Array.isArray(entry) ? entry.length : entry ? 1 : 0;
-values.push(workouts);
+    const workouts = Array.isArray(entry) ? entry.length : entry ? 1 : 0;
+
+    labels.push(`${d.getMonth() + 1}/${d.getDate()}`);
+    values.push(workouts);
   }
 
   return { labels, values };
@@ -203,43 +239,42 @@ function drawLineChart(ctx, labels, values) {
   ctx.stroke();
   ctx.restore();
 
-  // Y-axis ticks and numbers
-ctx.save();
-ctx.font = "11px Inter, system-ui, sans-serif";
-ctx.fillStyle = "rgba(92,102,122,0.9)";
-ctx.textAlign = "right";
+  // y-axis ticks and grid lines
+  ctx.save();
+  ctx.font = "11px Inter, system-ui, sans-serif";
+  ctx.fillStyle = "rgba(92,102,122,0.9)";
+  ctx.textAlign = "right";
 
-const steps = Math.min(maxY, 4); // limit tick count
-for (let i = 0; i <= steps; i++) {
-  const value = Math.round((i / steps) * maxY);
-  const yPos = y(value);
+  const steps = Math.min(maxY, 4);
 
-  // tick line
-  ctx.strokeStyle = "rgba(0,0,0,0.06)";
-  ctx.beginPath();
-  ctx.moveTo(padLeft - 4, yPos);
-  ctx.lineTo(padLeft + plotW, yPos);
-  ctx.stroke();
+  for (let i = 0; i <= steps; i++) {
+    const value = Math.round((i / steps) * maxY);
+    const yPos = y(value);
 
-  // number
-  ctx.fillText(value, padLeft - 8, yPos + 4);
-}
-ctx.restore();
+    ctx.strokeStyle = "rgba(0,0,0,0.06)";
+    ctx.beginPath();
+    ctx.moveTo(padLeft - 4, yPos);
+    ctx.lineTo(padLeft + plotW, yPos);
+    ctx.stroke();
 
-  // subtle fill under line
+    ctx.fillText(value, padLeft - 8, yPos + 4);
+  }
+
+  ctx.restore();
+
+  // fill under line
   if (points.length > 0) {
     const fillGradient = ctx.createLinearGradient(0, padTop, 0, padTop + plotH);
-fillGradient.addColorStop(0, "rgba(194,147,230,0.18)");
-fillGradient.addColorStop(1, "rgba(194,147,230,0.03)");
+    fillGradient.addColorStop(0, "rgba(194,147,230,0.18)");
+    fillGradient.addColorStop(1, "rgba(194,147,230,0.03)");
 
     ctx.save();
     ctx.fillStyle = fillGradient;
     ctx.beginPath();
     ctx.moveTo(points[0].x, padTop + plotH);
 
-    points.forEach((p, i) => {
-      if (i === 0) ctx.lineTo(p.x, p.y);
-      else ctx.lineTo(p.x, p.y);
+    points.forEach((p) => {
+      ctx.lineTo(p.x, p.y);
     });
 
     ctx.lineTo(points[points.length - 1].x, padTop + plotH);
@@ -250,12 +285,12 @@ fillGradient.addColorStop(1, "rgba(194,147,230,0.03)");
 
   // line
   ctx.save();
-ctx.strokeStyle = "rgb(194,147,230)";
-ctx.lineWidth = 5;
+  ctx.strokeStyle = "rgb(194,147,230)";
+  ctx.lineWidth = 5;
   ctx.lineJoin = "round";
   ctx.lineCap = "round";
-ctx.shadowColor = "rgba(194,147,230,0.35)";
-ctx.shadowBlur = 12;
+  ctx.shadowColor = "rgba(194,147,230,0.35)";
+  ctx.shadowBlur = 12;
 
   ctx.beginPath();
   points.forEach((p, i) => {
@@ -282,12 +317,11 @@ ctx.shadowBlur = 12;
     ctx.restore();
   });
 
-  // labels
+  // x-axis labels
   ctx.save();
   ctx.font = "12px Inter, system-ui, sans-serif";
   ctx.fillStyle = "rgba(92, 102, 122, 0.9)";
   ctx.textAlign = "center";
-  
 
   const step = Math.ceil(labels.length / 4);
   for (let i = 0; i < labels.length; i += step) {
@@ -297,19 +331,18 @@ ctx.shadowBlur = 12;
   if ((labels.length - 1) % step !== 0) {
     ctx.fillText(labels[labels.length - 1], x(labels.length - 1), h - 10);
   }
-  
 
   ctx.restore();
-  
+
   // y-axis title
-ctx.save();
-ctx.translate(14, padTop + plotH / 2);
-ctx.rotate(-Math.PI / 2);
-ctx.font = "12px Inter, system-ui, sans-serif";
-ctx.fillStyle = "rgba(92, 102, 122, 0.9)";
-ctx.textAlign = "center";
-ctx.fillText("# Workouts", 0, 0);
-ctx.restore();
+  ctx.save();
+  ctx.translate(14, padTop + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.font = "12px Inter, system-ui, sans-serif";
+  ctx.fillStyle = "rgba(92, 102, 122, 0.9)";
+  ctx.textAlign = "center";
+  ctx.fillText("# Workouts", 0, 0);
+  ctx.restore();
 }
 
 /*----------------------------WORKOUT.HTML LOGIC----------------------------*/
@@ -326,20 +359,20 @@ document.addEventListener("DOMContentLoaded", () => {
       none: "PLoc73631HFejnrFbIlSLXG9R1LLHuUmWX",
       dumbbells: "PLhHXVTMoVJN7eZslVmQ9-bZcK7ufQfmq_",
       yoga_mat: "PLux1QALV3rOuDP6bJ059AX2kKH-PWkSih",
-      bands: "PLrpq5Rd6OQUq-LDRPgVnYTZcVYC0ilVEg",
+      bands: "PLrpq5Rd6OQUq-LDRPgVnYTZcVYC0ilVEg"
     },
     medium: {
       none: "PL-QBwSWQqkd9Z4HtlDJ-WYIr3n8quyxGL",
       dumbbells: "PLhHXVTMoVJN4Dst3Z6LFb7z10-mtSqqTf",
       yoga_mat: "PLux1QALV3rOuQVVJTdtF2UkO_KYJc5EOj",
-      bands: "PLrpq5Rd6OQUo4jk9H-D3H4oO7RIJZQiMT",
+      bands: "PLrpq5Rd6OQUo4jk9H-D3H4oO7RIJZQiMT"
     },
     hard: {
       none: "PL-QBwSWQqkd_rPVP8L7Ygjo_NnX-cfjOT",
       dumbbells: "PLhHXVTMoVJN70baFfYDS9nQ05x8tyBaq3",
       yoga_mat: "PLux1QALV3rOuTeMq7kzrnwHhAl-b3VK0c",
-      bands: "PLrpq5Rd6OQUoUmdZ172BpwCdAo52-m7Ed",
-    },
+      bands: "PLrpq5Rd6OQUoUmdZ172BpwCdAo52-m7Ed"
+    }
   };
 
   if (!findBtn || !player || !msg) return;
@@ -393,52 +426,61 @@ document.addEventListener("DOMContentLoaded", () => {
   const calNext = document.getElementById("calNext");
   const calToday = document.getElementById("calToday");
 
-  // If we're not on progress.html, exit silently
   if (!calGrid || !calTitle || !calDetail) return;
 
   function monthName(m) {
-    return ["January","February","March","April","May","June","July","August","September","October","November","December"][m];
+    return [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ][m];
   }
 
   let view = new Date();
   view.setDate(1);
 
-function renderStats() {
-  const streakEl = document.getElementById("streakCount");
-  const streakMessage = document.getElementById("streakMessage");
+  function renderStats() {
+    const streakEl = document.getElementById("streakCount");
+    const streakMessage = document.getElementById("streakMessage");
+    const canvas = document.getElementById("streakChart");
 
-  const { current, longest } = computeStreakStats();
+    const { current, longest } = computeStreakStats();
 
-  if (streakMessage) {
-    streakMessage.textContent =
-      longest === 0
-        ? "Longest streak: 0 days"
-        : longest === 1
-        ? "Longest streak: 1 day"
-        : `Longest streak: ${longest} days`;
-  }
+    if (streakMessage) {
+      streakMessage.textContent =
+        longest === 0
+          ? "Longest streak: 0 days"
+          : longest === 1
+          ? "Longest streak: 1 day"
+          : `Longest streak: ${longest} days`;
+    }
 
-  if (streakEl) streakEl.textContent = current;
+    if (streakEl) {
+      streakEl.textContent = current;
+    }
 
-  const canvas = document.getElementById("streakChart");
-  if (canvas) {
-    const ctx = canvas.getContext("2d");
+    if (!canvas) return;
+
     const { labels, values } = buildLastNDaysSeries(14);
+    const chartKey = JSON.stringify({ labels, values });
+
+    // Fix: avoid unnecessary canvas redraws when data has not changed
+    if (chartKey === lastChartKey) return;
+
+    lastChartKey = chartKey;
+
+    const ctx = canvas.getContext("2d");
     drawLineChart(ctx, labels, values);
   }
-}
 
   function renderCalendar() {
     const log = loadLog();
-
     const year = view.getFullYear();
     const month = view.getMonth();
 
     calTitle.textContent = `${monthName(month)} ${year}`;
     calGrid.innerHTML = "";
 
-    // weekday headers
-    const weekdays = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     for (const w of weekdays) {
       const el = document.createElement("div");
       el.className = "cal-weekday";
@@ -449,22 +491,19 @@ function renderStats() {
     const first = new Date(year, month, 1);
     const startDow = first.getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const todayISO = toISODate(new Date());
 
-    // blanks before day 1
     for (let i = 0; i < startDow; i++) {
       const blank = document.createElement("div");
       blank.className = "cal-cell cal-blank";
       calGrid.appendChild(blank);
     }
 
-    const todayISO = toISODate(new Date());
-
-    // days
     for (let day = 1; day <= daysInMonth; day++) {
       const d = new Date(year, month, day);
       const iso = toISODate(d);
       const entry = log[iso];
-      const workouts = Array.isArray(entry) ? entry : entry ? [entry] : [];
+      const workouts = getWorkoutArray(entry);
 
       const btn = document.createElement("button");
       btn.type = "button";
@@ -473,9 +512,10 @@ function renderStats() {
       if (iso === todayISO) btn.classList.add("cal-today");
       if (workouts.length > 0) btn.classList.add("cal-done");
 
-const label = workouts.length > 0
-  ? `${workouts.length} workout${workouts.length > 1 ? "s" : ""}`
-  : "";
+      const label =
+        workouts.length > 0
+          ? `${workouts.length} workout${workouts.length > 1 ? "s" : ""}`
+          : "";
 
       btn.innerHTML = `
         <div class="cal-top">
@@ -485,56 +525,57 @@ const label = workouts.length > 0
         <div class="cal-sub">${label}</div>
       `;
 
-btn.addEventListener("click", () => {
-  if (workouts.length === 0) {
-    calDetail.innerHTML = `<p class="feature-text" style="margin:0;"><strong>${iso}</strong>: No workout logged.</p>`;
-    return;
-  }
+      btn.addEventListener("click", () => {
+        if (workouts.length === 0) {
+          calDetail.innerHTML = `<p class="feature-text" style="margin:0;"><strong>${iso}</strong>: No workout logged.</p>`;
+          return;
+        }
 
-  const workoutLines = workouts.map(w => {
-    const prettyEquipment = w.equipment.replace("_", " ").toUpperCase();
-    return `${w.intensity.toUpperCase()} + ${prettyEquipment}`;
-  }).join("<br>");
-
-  calDetail.innerHTML = `<p class="feature-text" style="margin:0;"><strong>${iso}</strong><br>${workoutLines}</p>`;
-});
+        calDetail.innerHTML = `
+          <p class="feature-text" style="margin:0;">
+            <strong>${iso}</strong><br>
+            ${workouts.map(formatWorkoutText).join("<br>")}
+          </p>
+        `;
+      });
 
       calGrid.appendChild(btn);
     }
   }
 
-  // nav buttons
   calPrev?.addEventListener("click", () => {
     view = new Date(view.getFullYear(), view.getMonth() - 1, 1);
     renderCalendar();
-    renderStats();
   });
 
   calNext?.addEventListener("click", () => {
     view = new Date(view.getFullYear(), view.getMonth() + 1, 1);
     renderCalendar();
-    renderStats();
   });
 
   calToday?.addEventListener("click", () => {
     const now = new Date();
     view = new Date(now.getFullYear(), now.getMonth(), 1);
     renderCalendar();
-    renderStats();
 
-    // show today's detail
     const iso = toISODate(now);
-const entry = loadLog()[iso];
-const workouts = Array.isArray(entry) ? entry : entry ? [entry] : [];
+    const entry = loadLog()[iso];
+    const workouts = getWorkoutArray(entry);
 
-calDetail.innerHTML = workouts.length > 0
-  ? `<p class="feature-text" style="margin:0;"><strong>${iso}</strong><br>${workouts.map(w =>
-      `${w.intensity.toUpperCase()} + ${w.equipment.replace("_", " ").toUpperCase()}`
-    ).join("<br>")}</p>`
-  : `<p class="feature-text" style="margin:0;"><strong>${iso}</strong>: No workout logged.</p>`;
+    calDetail.innerHTML = workouts.length > 0
+      ? `<p class="feature-text" style="margin:0;"><strong>${iso}</strong><br>${workouts.map(formatWorkoutText).join("<br>")}</p>`
+      : `<p class="feature-text" style="margin:0;"><strong>${iso}</strong>: No workout logged.</p>`;
   });
 
-  // initial render
+  let resizeTimer = null;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      lastChartKey = "";
+      renderStats();
+    }, 150);
+  });
+
   renderCalendar();
   renderStats();
 });
@@ -545,7 +586,7 @@ const quotes = [
   { text: "You’ve survived 100 percent of your worst days.", sub: "— Robin Arzon" },
   { text: "The hardest part is over. You showed up.", sub: "— Jess Sims" },
   { text: "A 10-minute workout is always better than none.", sub: "— StarStack" },
-  { text: "Treat your body like someone you love.", sub: "— Hannah Corbin" },
+  { text: "Treat your body like someone you love.", sub: "— Hannah Corbin" }
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -560,8 +601,6 @@ document.addEventListener("DOMContentLoaded", () => {
 /*----------------------------PROFILE.HTML LOGIC----------------------------*/
 document.addEventListener("DOMContentLoaded", () => {
   const profileMain = document.getElementById("profile-main");
-
-  // If we're not on profile.html, exit silently
   if (!profileMain) return;
 
   const profileStatus = document.getElementById("profile-status");
@@ -573,30 +612,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const profileEmailShort = document.getElementById("profile-email-short");
   const profileMemberSince = document.getElementById("profile-member-since");
   const logoutButton = document.getElementById("profile-logout-btn");
-
-  function getInitials(displayName, email) {
-    const source = displayName?.trim() || email?.split("@")[0] || "User";
-    const parts = source.split(/\s+/).filter(Boolean);
-
-    if (parts.length === 1) {
-      return parts[0].slice(0, 2).toUpperCase();
-    }
-
-    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-  }
-
-  function formatMemberSince(dateValue) {
-    if (!dateValue) return "-";
-
-    const date = new Date(dateValue);
-    if (Number.isNaN(date.getTime())) return "-";
-
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric"
-    }).format(date);
-  }
 
   function setAvatar(imageElement, fallbackElement, avatarUrl, initials) {
     if (avatarUrl) {
@@ -643,7 +658,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (profileEmail) profileEmail.textContent = email;
     if (profileEmailShort) {
       profileEmailShort.textContent =
-        email.length > 14 ? email.slice(0, 14) + "..." : email;
+        email.length > 14 ? `${email.slice(0, 14)}...` : email;
     }
     if (profileMemberSince) {
       profileMemberSince.textContent = formatMemberSince(user.metadata.creationTime);
@@ -660,14 +675,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const navAvatarFallback = document.getElementById("nav-avatar-fallback");
 
   if (!navAvatarImage || !navAvatarFallback) return;
-
-  function getInitials(displayName, email) {
-    const source = displayName?.trim() || email?.split("@")[0] || "User";
-    const parts = source.split(/\s+/).filter(Boolean);
-
-    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-  }
 
   function renderNavAvatar(user) {
     const avatarUrl = user?.photoURL || "";
