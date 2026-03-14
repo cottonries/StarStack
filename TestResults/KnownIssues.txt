@@ -11,10 +11,12 @@ While the core functionality of StarStack is stable, a few minor issues and limi
 #2 Workout Video Dependency on YouTube Embeds
   - Workout videos rely on external YouTube playlists. If a playlist is removed, region blocked, or embedding is disabled, the workout video may fail to load.
   - Impact: The workout page may not display the intended workout video.
+  - Partially Resolved (3/14/26): Better loading and error feedback were added, but the app still depends on external YouTube playlists.
 
 #3 No Rate Limiting for Logging Workouts
   - A user could log an unlimited number of workouts in a short period of time.
   - Impact: This could result in unrealistic workout statistics and inaccurate streak charts.
+  - Partially Resolved (3/14/26): Added a cooldown-based rate limit was added to workout logging. Users can still log multiple workouts in a day, but repeated logs within a short time window (2 min per) are blocked to reduce accidental duplicates and spam entries.
 
 #4 Streak Calculation Logic Edge Cases
   - The streak system depends on continuous dates, so factors like timezone differences or logging a workout near midnight can create date mismatches.
@@ -27,6 +29,7 @@ While the core functionality of StarStack is stable, a few minor issues and limi
 #7 Limited Mobile Optimization
   - While the interface functions on smaller screens, some elements such as charts and workout selection menus may require additional scrolling on mobile devices.
   - Impact: User experience on smaller screens may not be as optimized as desktop usage.
+  - Partially Resolved (3/14/26): Some interface and feedback states were improved, but certain layouts may still require extra scrolling on smaller screens.
 
 #8 No Offline Mode
   - StarStack currently requires an internet connection to authenticate users (FireBase) and load workout videos (YouTube).
