@@ -23,7 +23,7 @@ Last formal run done: 3/13/26
 Last formal run done: 3/13/26
 
 ### index.html
-<img width="1436" height="214" alt="Image" src="https://github.com/user-attachments/assets/9e5c8811-ff34-4800-ba0f-a85ea98f1e9a" />
+<img width="1440" height="216" alt="Image" src="https://github.com/user-attachments/assets/63e9e9af-c16c-4b21-9cad-b90969459698" />
 
 ### home.html
 <img width="1440" height="215" alt="Image" src="https://github.com/user-attachments/assets/c677709a-b0d7-4c99-9dda-b4e7f47f7c42" />
