@@ -20,7 +20,7 @@ Last formal run done: 3/13/26
 
 *(In a new incognito window) inspect > Lighthouse > Navigation/Desktop/Performance+Accessibility+Best Practices+SEO > Analyze page load*
 
-Last formal run done: 3/13/26
+Last formal run done: 3/14/26
 
 #### index.html
 <img width="1440" height="216" alt="Image" src="https://github.com/user-attachments/assets/63e9e9af-c16c-4b21-9cad-b90969459698" />
@@ -69,7 +69,7 @@ Last formal run done: 3/13/26
 
 # Notes From User Testing
 
-## Initial User Elicitation Regarding Prototype 1 (No code - Figma only)
+## Initial User Elicitation Regarding Prototype (No code - Figma only)
 
 <img width="2348" height="751" alt="Screenshot 2026-03-13 at 12 59 03 PM" src="https://github.com/user-attachments/assets/b16237c1-6756-450a-b09f-b9ae0627dddf" />
 
@@ -144,9 +144,10 @@ Last formal run done: 3/13/26
 | Weaknesses or areas for improvement | Could benefit from AI features and more performance statistics or metrics. |
 
 
-## Secondary User Elicitation Regarding Prototype 1
-### Bug Bash – GitHub Deployed Webpage  
+## Secondary User Elicitation Regarding Prototype 
+### Bug Bash – GitHub Deployed Webpage; v0.0.1-bugbash
 **Users:** UW CSS 360 (Software Engineering) Students 
+
 **Date:** March 4, 2026  
 
 ---
