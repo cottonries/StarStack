@@ -4,15 +4,42 @@
 
 ## Automated Test Run Output
 
+### Playwright Testing
+
 ![Playwright Tests](https://github.com/cottonries/StarStack/actions/workflows/playwright.yml/badge.svg) 
 
 <img width="641" height="241" alt="Screenshot 2026-03-13 at 1 04 35 PM" src="https://github.com/user-attachments/assets/dcc055b2-e17b-4133-80f2-276c6793d50c" />
 
 <img width="1005" height="426" alt="Screenshot 2026-03-13 at 1 04 43 PM" src="https://github.com/user-attachments/assets/7d78933a-425b-40d2-bb6c-557263b53cce" />
 
+### Google Chrome Developer Tools (Lighthouse Audit)
+
+### index.html
+
+
+
+### home.html
+
+
+
+### workout.html
+
+
+
+### progress.html
+
+
+
+### profile.html
+
+
+
+
 ---
 
 ## Manual Test Cases (Last Confirmed 3/13/26)
+
+### Core Flow Manual Test
 
 | Test ID | Feature | Steps | Expected Result | Actual Result | Pass/Fail |
 |-------|-------|-------|-------|-------|-------|
