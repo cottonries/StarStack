@@ -290,6 +290,10 @@ canvas {
   padding: 50px 0;
 }
 
+.features + .features {
+  padding-top: 0;
+}
+
 .features-inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -881,12 +885,14 @@ select {
     font-size: 15px;
   }
 
-  .grid,
-  .features-inner,
-  .hero-stats {
-    grid-template-columns: 1fr;
-    flex-direction: column;
-  }
+ .grid,
+ .features-inner {
+   grid-template-columns: 1fr;
+ }
+
+.hero-stats {
+  flex-direction: column;
+}
 
   .feature-title {
     font-size: 24px;
