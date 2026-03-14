@@ -22,19 +22,19 @@ Last formal run done: 3/13/26
 
 Last formal run done: 3/13/26
 
-### index.html
+#### index.html
 <img width="1440" height="216" alt="Image" src="https://github.com/user-attachments/assets/63e9e9af-c16c-4b21-9cad-b90969459698" />
 
-### home.html
+#### home.html
 <img width="1440" height="215" alt="Image" src="https://github.com/user-attachments/assets/c677709a-b0d7-4c99-9dda-b4e7f47f7c42" />
 
-### workout.html
+#### workout.html
 <img width="1439" height="215" alt="Image" src="https://github.com/user-attachments/assets/ff39217b-8c0c-40d7-bab2-81acbde38f86" />
 
-### progress.html
+#### progress.html
 <img width="1440" height="244" alt="Image" src="https://github.com/user-attachments/assets/2338f2bd-8723-412c-9883-9de69ddc521b" />
 
-### profile.html
+#### profile.html
 <img width="1440" height="240" alt="Image" src="https://github.com/user-attachments/assets/e6d37d2c-34a4-4ebe-bfa3-b97f16f6f937" /> 
 
 ---
@@ -61,7 +61,8 @@ Last formal run done: 3/13/26
 
 ---
 
-## Screenshot of FireBase Anallytics Realtime Overview
+## Screenshot of FireBase Anallytics Realtime Overview (Last Confirmed 3/13/26)
+
 <img width="1118" height="709" alt="Screenshot 2026-03-13 at 12 37 19 PM" src="https://github.com/user-attachments/assets/f7206dd0-1c70-425d-a347-8960b8fc6c59" />
 
 ---
