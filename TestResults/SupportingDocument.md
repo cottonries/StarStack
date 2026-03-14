@@ -57,6 +57,7 @@ Last formal run done: 3/13/26
 | M10 | Logout | Click **Logout** on profile page | User is signed out and redirected to login page | Works as expected | Pass |
 | M11 | Mobile layout | Open site on mobile or narrow browser window | UI elements remain readable and stay on screen | Works as expected | Pass |
 | M12 | Calendar alignment | View calendar on progress page | Calendar grid is properly aligned and readable | Works as expected | Pass |
+| M13 | Email Link | UX | Footer contact link opens email client with pre-filled template | Works as expected | Pass |
 
 ---
 
