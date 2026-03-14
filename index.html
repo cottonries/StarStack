@@ -62,30 +62,42 @@
     </section>
 
     <!-- Image Grid -->
-    <section class="grid-wrap" id="workouts">
-      <div class="container">
-        <div class="grid">
-          <div class="card">
-            <img
-              src="https://plus.unsplash.com/premium_photo-1672783582216-f7b0a370a1f8?q=80&w=800&auto=format&fit=crop"
-              alt="Person exercising indoors"
-            />
-          </div>
-          <div class="card">
-            <img
-              src="https://plus.unsplash.com/premium_photo-1670505059783-228b77d8df17?q=80&w=800&auto=format&fit=crop"
-              alt="Person doing a home workout"
-            />
-          </div>
-          <div class="card">
-            <img
-              src="https://images.unsplash.com/photo-1539794830467-1f1755804d13?q=80&w=800&auto=format&fit=crop"
-              alt="Fitness routine and workout setup"
-            />
-          </div>
-        </div>
+<section class="grid-wrap" id="workouts">
+  <div class="container">
+    <div class="grid">
+      <div class="card">
+        <img
+          src="https://plus.unsplash.com/premium_photo-1672783582216-f7b0a370a1f8?q=80&w=800&auto=format&fit=crop"
+          alt="Person exercising indoors"
+          width="800"
+          height="800"
+          fetchpriority="high"
+          decoding="async"
+        />
       </div>
-    </section>
+      <div class="card">
+        <img
+          src="https://plus.unsplash.com/premium_photo-1670505059783-228b77d8df17?q=80&w=800&auto=format&fit=crop"
+          alt="Person doing a home workout"
+          width="800"
+          height="1200"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <div class="card">
+        <img
+          src="https://images.unsplash.com/photo-1539794830467-1f1755804d13?q=80&w=800&auto=format&fit=crop"
+          alt="Fitness routine and workout setup"
+          width="800"
+          height="1200"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </div>
+</section>
 
     <!-- Features -->
     <section class="features" id="how">
@@ -195,43 +207,42 @@
 
   <!-- Firebase Auth for Google -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-    import {
-      getAuth,
-      GoogleAuthProvider,
-      signInWithPopup
-    } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+  const btn = document.getElementById("start-btn");
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAyHQEc2TKcxERFu_-POYGp6fR_qTyBQK4",
-      authDomain: "starstack-7951e.firebaseapp.com",
-      projectId: "starstack-7951e",
-      storageBucket: "starstack-7951e.firebasestorage.app",
-      messagingSenderId: "539252727920",
-      appId: "1:539252727920:web:647722f0ad9554562a54b5",
-      measurementId: "G-4FX51V20PV"
-    };
+  if (btn) {
+    btn.addEventListener("click", async (e) => {
+      e.preventDefault();
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
+      try {
+        const [{ initializeApp }, { getAuth, GoogleAuthProvider, signInWithPopup }] =
+          await Promise.all([
+            import("https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js"),
+            import("https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js")
+          ]);
 
-    const btn = document.getElementById("start-btn");
+        const firebaseConfig = {
+          apiKey: "AIzaSyAyHQEc2TKcxERFu_-POYGp6fR_qTyBQK4",
+          authDomain: "starstack-7951e.firebaseapp.com",
+          projectId: "starstack-7951e",
+          storageBucket: "starstack-7951e.firebasestorage.app",
+          messagingSenderId: "539252727920",
+          appId: "1:539252727920:web:647722f0ad9554562a54b5",
+          measurementId: "G-4FX51V20PV"
+        };
 
-    if (btn) {
-      btn.addEventListener("click", async (e) => {
-        e.preventDefault();
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
 
-        try {
-          const result = await signInWithPopup(auth, provider);
-          console.log("Signed in:", result.user.email);
-          window.location.href = "home.html";
-        } catch (err) {
-          console.error(err);
-          alert(err.message);
-        }
-      });
-    }
-  </script>
+        const result = await signInWithPopup(auth, provider);
+        console.log("Signed in:", result.user.email);
+        window.location.href = "home.html";
+      } catch (err) {
+        console.error(err);
+        alert(err.message);
+      }
+    });
+  }
+</script>
 </body>
 </html>
