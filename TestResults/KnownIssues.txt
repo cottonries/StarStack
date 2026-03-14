@@ -1,9 +1,35 @@
-Known Issues
+================================================
+~*~ KNOWN ISSUES ~*~
+================================================
 
 While the core functionality of StarStack is stable, a few minor issues and limitations are currently known:
 
-No known issues at this time.
+#1 No Workout Deletion Feature
+  - Currently users cannot remove incorrect workout logs or edit previous entries.
+  - Impact: User mistakes permanently affect progress statistics.
 
-*Small issue noticed during our demo that will be fixed
+#2 Workout Video Dependency on YouTube Embeds
+  - Workout videos rely on external YouTube playlists. If a playlist is removed, region blocked, or embedding is disabled, the workout video may fail to load.
+  - Impact: The workout page may not display the intended workout video.
 
-This/These (depending on how many more come up) issues do not affect the core ability to log in, select workouts, watch videos, or track workout progress.
+#3 No Rate Limiting for Logging Workouts
+  - A user could log an unlimited number of workouts in a short period of time.
+  - Impact: This could result in unrealistic workout statistics and inaccurate streak charts.
+
+#4 Streak Calculation Logic Edge Cases
+  - The streak system depends on continuous dates, so factors like timezone differences or logging a workout near midnight can create date mismatches.
+  - Impact: In rare cases, streak counts may appear incorrect or reset unexpectedly.
+
+#5 Local Storage Data Persistence
+  - Workout history is currently stored using the browser’s localStorage rather than a cloud database.
+  - Impact: Workout data may be lost if the user clears their browser data or switches devices.
+
+#7 Limited Mobile Optimization
+  - While the interface functions on smaller screens, some elements such as charts and workout selection menus may require additional scrolling on mobile devices.
+  - Impact: User experience on smaller screens may not be as optimized as desktop usage.
+
+#8 No Offline Mode
+  - StarStack currently requires an internet connection to authenticate users (FireBase) and load workout videos (YouTube).
+  - Impact: The application cannot be used offline.
+
+These issues do not affect the current core ability to log in, select workouts, watch videos, or track workout progress.
