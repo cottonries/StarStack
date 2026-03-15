@@ -61,6 +61,46 @@ Last formal run done: 3/14/26
 
 ---
 
+## Usage Load Testing
+
+### Test Scenario: Concurrent user access during in-class Bug Bash.
+
+### Description:
+During the in-class Bug Bash event, students in the CSS360 class accessed the StarStack website simultaneously. The class consists of 32 students. Considering that three members of the StarStack team were present during the rollout, the professor was not actively participating, and some students may not have engaged with the site, we estimated that approximately 80% of the class (about 25–26 users) were accessing StarStack concurrently.
+
+### Results:
+All pages loaded successfully and no noticeable lag or performance issues were observed during this test.
+
+- Estimated Concurrent Users: ~25 users
+- Expected Behavior: Website loads pages normally with no crashes or major delays
+- Observed Behavior: Pages loaded correctly and application remained responsive
+  
+## Result: Pass
+
+---
+
+## Performance Testing
+
+Performance measurements were taken using Chrome Developer Tools with caching disabled to simulate first-load conditions. Each interaction was tested three times, averaged, and compared against the defined performance targets.
+
+| Test Area | Target | Actual | Result |
+|---|----|---|---|
+| Initial Page Load | < 3.5 s | ~0.7 s | Pass |
+| Login + Home Rendering | < 3 s | ~2.76 s | Pass |
+| Video Embed Loading | < 5 s | ~1.83 s | Pass |
+| Workout Logging | < 1 s | ~0.4 s | Pass |
+
+### Measurement Method
+
+- **Initial Page Load:** Measured using Chrome DevTools **Network tab** with cache disabled.
+  <img width="1439" height="364" alt="Image" src="https://github.com/user-attachments/assets/7903d94b-7e8e-4e79-8b3b-d70e124ef2f6" />
+- **Login + Home Rendering:** Timed from clicking **Sign in with Google** until the home page finished rendering. (After being logged in previously. The logout session is saved so there is an automatic redirect. This time does not include the time it would take to manually enter a user's username and password.)
+- **Video Embed Loading:** Timed from selecting a workout until the embedded video appeared and was playable.
+- **Workout Logging:** Timed from clicking **Log Workout** until the workout entry appeared in the progress log. (The workout page will show when a workout is logged).
+
+All tested interactions completed within the defined performance targets and the application remained responsive during testing.
+---
+
 ## Screenshot of FireBase Anallytics Realtime Overview (Last Confirmed 3/13/26)
 
 <img width="1118" height="709" alt="Screenshot 2026-03-13 at 12 37 19 PM" src="https://github.com/user-attachments/assets/f7206dd0-1c70-425d-a347-8960b8fc6c59" />
