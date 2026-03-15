@@ -4,23 +4,23 @@
 
 ## Automated Test Run Output
 
-### Playwright Testing
+### Playwright Testing (Continously Running)
 
-*Continously Running* 
-
-Last formal run done: 3/13/26
+Last formal run done: 3/15/26
 
 ![Playwright Tests](https://github.com/cottonries/StarStack/actions/workflows/playwright.yml/badge.svg) 
 
-<img width="641" height="241" alt="Screenshot 2026-03-13 at 1 04 35 PM" src="https://github.com/user-attachments/assets/dcc055b2-e17b-4133-80f2-276c6793d50c" />
+<img width="974" height="163" alt="Image" src="https://github.com/user-attachments/assets/01150554-3a72-45fa-a30a-1a3ef202080e" />
 
-<img width="1005" height="426" alt="Screenshot 2026-03-13 at 1 04 43 PM" src="https://github.com/user-attachments/assets/7d78933a-425b-40d2-bb6c-557263b53cce" />
+<img width="993" height="480" alt="Image" src="https://github.com/user-attachments/assets/965776c6-da0b-4a57-ba4d-304bb5d79329" />
 
-### Google Chrome Developer Tools (Lighthouse Audit)
+*Playwright can not interact with external pop-ups so we were unable to use it to test the login process*
+
+---
+
+### Google Chrome Developer Tools - Lighthouse Audit (Last Confirmed 3/14/26)
 
 *(In a new incognito window) inspect > Lighthouse > Navigation/Desktop/Performance+Accessibility+Best Practices+SEO > Analyze page load*
-
-Last formal run done: 3/14/26
 
 #### index.html
 <img width="1440" height="216" alt="Image" src="https://github.com/user-attachments/assets/63e9e9af-c16c-4b21-9cad-b90969459698" />
@@ -39,7 +39,7 @@ Last formal run done: 3/14/26
 
 ---
 
-## Manual Test Cases (Last Confirmed 3/13/26)
+## Manual Test Cases (Last Confirmed 3/15/26)
 
 ### Core Flow Manual Test
 
@@ -61,7 +61,7 @@ Last formal run done: 3/14/26
 
 ---
 
-## Usage Load Testing
+## Usage Load Testing (Last Confirmed 3/4/26)
 
 ### Test Scenario: Concurrent user access during in-class Bug Bash.
 
@@ -75,11 +75,11 @@ All pages loaded successfully and no noticeable lag or performance issues were o
 - Expected Behavior: Website loads pages normally with no crashes or major delays
 - Observed Behavior: Pages loaded correctly and application remained responsive
   
-## Result: Pass
+### Result: Pass
 
 ---
 
-## Performance Testing
+## Performance Testing (Last Confirmed 3/15/26)
 
 Performance measurements were taken using Chrome Developer Tools with caching disabled to simulate first-load conditions. Each interaction was tested three times, averaged, and compared against the defined performance targets.
 
@@ -98,7 +98,8 @@ Performance measurements were taken using Chrome Developer Tools with caching di
 - **Video Embed Loading:** Timed from selecting a workout until the embedded video appeared and was playable.
 - **Workout Logging:** Timed from clicking **Log Workout** until the workout entry appeared in the progress log. (The workout page will show when a workout is logged).
 
-All tested interactions completed within the defined performance targets and the application remained responsive during testing.
+### Result: All tested interactions completed within the defined performance targets and the application remained responsive during testing.
+
 ---
 
 ## Screenshot of FireBase Anallytics Realtime Overview (Last Confirmed 3/13/26)
