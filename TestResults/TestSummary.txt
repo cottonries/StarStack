@@ -38,10 +38,10 @@ Most Recent Test Run: 3/4/2026
 
 During an in-class bug bash event, other students tested the StarStack website and attempted to identify usability issues, bugs, or unexpected behavior. This provided additional real-user testing and feedback from individuals who were not part of the development team. 
 
-Any issues discovered during the event were recorded and tracked using our bug tracking spreadsheet and project management tools.
+Any issues discovered during the event were recorded and tracked using our bug tracking spreadsheet and project management tools. This even was also used for usage testing which showed no crash or lag in the website's performance.
 
 RESULT:
-Several minor bugs and usability issues were identified and fixed, which helped improve the overall stability and user experience of the application.
+Several minor bugs and usability issues were identified and fixed, which helped improve the overall stability and user experience of the application. The program proved to run effeciently under a load of about 25 concurrent users.
 
 ================================================
 AUTOMATED END-TO-END TESTING (PLAYWRIGHT)
@@ -49,7 +49,7 @@ Most Recent Test Run: Ongoing
 *More information can be found in the TestResults/SupportingDocuments.md
 ================================================
 
-We implemented three Playwright automated tests that simulate real user interactions with the application. These tests verify that key workflows such as opening the workout page, selecting workout options, loading a workout video, logging a workout, and viewing progress tracking elements function correctly.
+We implemented four Playwright automated tests that simulate real user interactions with the application. These tests verify that key workflows such as opening the workout page, selecting workout options, loading a workout video, logging a workout, and viewing progress tracking elements function correctly.
 
 RESULT: 
 Automated tests confirmed that the primary workflows of the application operate correctly.
