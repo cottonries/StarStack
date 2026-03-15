@@ -1,7 +1,8 @@
+# StarStack
 [![Playwright Tests](https://github.com/cottonries/StarStack/actions/workflows/playwright.yml/badge.svg)](https://github.com/cottonries/StarStack/actions/workflows/playwright.yml)
 
+![GitHub Repo stars](https://img.shields.io/github/stars/cottonries/StarStack?style=social)
 
-# StarStack
 
 StarStack is a cardio-focused fitness website designed to help users find workouts that fit their individual needs. The site will use user-based interaction to select workout criteria such as intensity level and workout type. Based on these selections, StarStack will display an embedded YouTube video that matches the chosen criteria, allowing users to quickly access guided cardio workouts without needing to search manually.
 
@@ -73,22 +74,30 @@ npx playwright show-report
 
 ## Tech Stack
 
-### Frontend
-- **HTML5** – Page structure (`index.html`, `home.html`, `workout.html`, `progress.html`, `profile.html`)
-- **CSS3** – Styling and layout (`style.css`)
-- **JavaScript (ES Modules)** – Client-side application logic (`app.js`)
+Frontend
+- HTML
+- CSS
+- JavaScript
 
-### Libraries
-- **Chart.js** – JavaScript library used to generate the workout progress line chart.
+Libraries and Services
+- Firebase Authentication
+- Chart.js
+- YouTube Embedded Player
 
-### Backend / Cloud Services
-- **Firebase Authentication** – Handles Google sign-in and user session management.
+Testing
+- Playwright
+- GitHub Actions CI
 
-### Data Storage
-- **Browser LocalStorage** – Stores user workout logs locally in the browser.
+---
+### Testing Resources
 
-### External Integrations
-- **YouTube Embed** – Displays workout videos directly within the workout page.
+- [Automated Playwright Tests](https://github.com/cottonries/StarStack/tree/main/tests)
+- [Test Summary](https://github.com/cottonries/StarStack/blob/main/TestResults/TestSummary.txt)
+- [Supporting Documentation](https://github.com/cottonries/StarStack/blob/main/TestResults/SupportingDocument.md)
+- [Known Issues](https://github.com/cottonries/StarStack/blob/main/TestResults/KnownIssues.txt)
+
+Continuous Integration:
+https://github.com/cottonries/StarStack/actions
 
 ---
 
